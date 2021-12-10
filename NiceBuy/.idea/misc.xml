@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/practicas/curso3/Ingenieria software/practica5/Notepadv3/app/src/main/res/layout/activity_notepadv3.xml" value="0.15925925925925927" />
+        <entry key="..\:/practicas/curso3/Ingenieria software/practica5/Notepadv3/app/src/main/res/layout/note_edit.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_notepadv3.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/note_edit.xml" value="0.15070921985815602" />
+        <entry key="app/src/main/res/layout/product_edit.xml" value="0.33257845715630424" />
+        <entry key="app/src/main/res/layout/product_pad.xml" value="0.16770833333333332" />
+      </map>
+    </option>
+  </component>
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../pr5_javadoc" />
+    <option name="OPTION_INCLUDE_LIBS" value="true" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

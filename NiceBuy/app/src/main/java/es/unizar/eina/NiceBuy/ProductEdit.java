@@ -1,0 +1,83 @@
+package es.unizar.eina.NiceBuy;
+
+import android.widget.EditText;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.view.View;
+
+import android.widget.Button;
+import android.widget.TextView;
+
+
+import es.unizar.eina.NiceBuy.ProductDbAdapter;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+
+public class ProductEdit extends AppCompatActivity{
+    private EditText titulo;
+    private EditText descripcion;
+    private EditText peso;
+    private EditText precio;
+
+    // identificador fila
+    private Long mRowId;
+
+    // gestion bbdd
+    private ProductDbAdapter mDbHelper;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mDbHelper = new ProductDbAdapter(this);
+        mDbHelper.open();
+
+        setContentView(R.layout.note_edit);
+        setTitle(R.string.edit_note);
+
+
+        titulo = (EditText) findViewById(R.id.title);
+        descripcion = (EditText) findViewById(R.id.descripcion);
+        peso = (EditText) findViewById(R.id.peso);
+        precio = (EditText) findViewById(R.id.precio);
+
+
+        Button confirmButton = (Button) findViewById(R.id.confirm);
+
+        mRowId = (savedInstanceState == null) ? null :
+                (Long) savedInstanceState.getSerializable(ProductDbAdapter.KEY_ROWID);
+        if (mRowId== null) {
+            Bundle extras = getIntent().getExtras();
+            mRowId = (extras != null) ?
+                    extras.getLong(ProductDbAdapter.KEY_ROWID) : null;
+        }
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+
+
+            public void onClick(View view) { setResult(RESULT_OK);
+                finish ();
+            }
+
+        });
+    }
+
+    private void populateFields() {
+        if (mRowId != null) {
+            Cursor note = mDbHelper.fetchNote(mRowId);
+            //noinspection deprecation
+            startManagingCursor(note);
+
+            titulo.setText(note.getString(
+                    note.getColumnIndexOrThrow(ProductDbAdapter.KEY_TITLE)));
+            descripcion.setText(note.getString(
+                    note.getColumnIndexOrThrow(ProductDbAdapter.KEY_DESCRIPCION)));
+            peso.setText(note.getString(
+                    note.getColumnIndexOrThrow(ProductDbAdapter.KEY_PESO)));
+            precio.setText(note.getString(
+                    note.getColumnIndexOrThrow(ProductDbAdapter.KEY_PRECIO)));
+        }
+    }
+
+
+}
