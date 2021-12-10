@@ -76,7 +76,7 @@ public class ProductDbAdapter {
      * @param descripcion the body of the note
      * @return rowId or -1 if failed
      */
-    public long createNote(String title, String peso, String precio, String descripcion ) {
+    public long createProduct(String title, String peso, String precio, String descripcion ) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_TITLE, title);
         initialValues.put(KEY_PESO, peso);
@@ -93,7 +93,7 @@ public class ProductDbAdapter {
      * @param rowId id of note to delete
      * @return true if deleted, false otherwise
      */
-    public boolean deleteNote(long rowId) {
+    public boolean deleteProduct(long rowId) {
 
         return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
     }
@@ -103,7 +103,7 @@ public class ProductDbAdapter {
      *
      * @return Cursor over all notes
      */
-    public Cursor fetchAllNotes() {
+    public Cursor fetchAllProducts() {
 
         return mDb.query(DATABASE_TABLE, new String[] {
                 KEY_ROWID,
@@ -149,7 +149,7 @@ public class ProductDbAdapter {
      * @param descripcion value to set note body to
      * @return true if the note was successfully updated, false otherwise
      */
-    public boolean updateNote(long rowId, String title, String peso, String precio, String descripcion) {
+    public boolean updateProduct(long rowId, String title, String peso, String precio, String descripcion) {
         ContentValues args = new ContentValues();
         args.put(KEY_TITLE, title);
         args.put(KEY_PESO, peso);

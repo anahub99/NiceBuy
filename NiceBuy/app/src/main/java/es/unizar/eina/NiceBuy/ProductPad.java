@@ -1,7 +1,6 @@
 package es.unizar.eina.NiceBuy;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.SortedList;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -50,7 +48,7 @@ public class ProductPad extends AppCompatActivity {
 
 
     private void fillData () {
-        Cursor c = mDbHelper.fetchAllNotes();
+        Cursor c = mDbHelper.fetchAllProducts();
         startManagingCursor(c); // deprecated method, but still works
         String[] from = new String[] { ProductDbAdapter.KEY_TITLE };
 
@@ -60,7 +58,7 @@ public class ProductPad extends AppCompatActivity {
         mList.setAdapter(notes); }
 
 
-
+// Funcion para añadir las opciones del menu
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -73,7 +71,7 @@ public class ProductPad extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case INSERT_ID:
-                createNote();
+                createProduct();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -94,12 +92,12 @@ public class ProductPad extends AppCompatActivity {
         switch(item.getItemId()) {
             case DELETE_ID:
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                mDbHelper.deleteNote(info.id);
+                mDbHelper.deleteProduct(info.id);
                 fillData();
                 return true;
             case EDIT_ID:
                 info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                editNote(info.position, info.id);
+                editProduct(info.position, info.id);
                 return true;
             case EMAIL_ID:
                 info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -113,13 +111,13 @@ public class ProductPad extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
-    private void createNote() {
+    private void createProduct() {
         Intent i = new Intent(this, ProductEdit.class);
         startActivityForResult(i, ACTIVITY_CREATE);
     }
 
 
-    protected void editNote(int position, long id) {
+    protected void editProduct(int position, long id) {
 
         Intent i = new Intent(this, ProductEdit.class);
         i.putExtra(ProductDbAdapter.KEY_ROWID, id);

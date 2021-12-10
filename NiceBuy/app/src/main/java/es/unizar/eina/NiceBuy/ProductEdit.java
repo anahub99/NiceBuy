@@ -33,7 +33,7 @@ public class ProductEdit extends AppCompatActivity{
         mDbHelper = new ProductDbAdapter(this);
         mDbHelper.open();
 
-        setContentView(R.layout.note_edit);
+        setContentView(R.layout.product_edit);
         setTitle(R.string.edit_note);
 
 
@@ -52,6 +52,7 @@ public class ProductEdit extends AppCompatActivity{
             mRowId = (extras != null) ?
                     extras.getLong(ProductDbAdapter.KEY_ROWID) : null;
         }
+        populateFields();
         confirmButton.setOnClickListener(new View.OnClickListener() {
 
 
@@ -79,5 +80,38 @@ public class ProductEdit extends AppCompatActivity{
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        saveState();
+        outState.putSerializable(ProductDbAdapter.KEY_ROWID, mRowId);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        populateFields();
+    }
+
+    private void saveState() {
+        String title = titulo.getText().toString();
+        String body = descripcion.getText().toString();
+        String w = peso.getText().toString();
+        String p = precio.getText().toString();
+        if (mRowId == null) {
+            long id = mDbHelper.createProduct(title, body, w, p);
+            if (id > 0) {
+                mRowId = id;
+            }
+        } else {
+            mDbHelper.updateProduct(mRowId, title, body, w, p);
+        }
+    }
 
 }
