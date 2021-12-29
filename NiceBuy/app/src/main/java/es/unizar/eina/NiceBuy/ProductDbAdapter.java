@@ -28,6 +28,9 @@ public class ProductDbAdapter {
     public static final String KEY_PESO = "peso";
     public static final String KEY_ROWID = "_id";
 
+    public enum OrdenarPor {
+        na, pa, wa
+    }
 
 
     private DatabaseHelper mDbHelper;
@@ -44,6 +47,7 @@ public class ProductDbAdapter {
      * @param ctx the Context within which to work
      */
     public ProductDbAdapter(Context ctx) {
+
         this.mCtx = ctx;
     }
 
@@ -103,7 +107,18 @@ public class ProductDbAdapter {
      *
      * @return Cursor over all notes
      */
-    public Cursor fetchAllProducts() {
+    public Cursor fetchAllProducts(OrdenarPor parametro) {
+    String parametroAux = null;
+    switch(parametro){
+        case na:
+            parametroAux = KEY_TITLE;
+            break;
+        case pa:
+            parametroAux = KEY_PRECIO;
+            break;
+        case wa:
+            parametroAux = KEY_PESO;
+    }
 
         return mDb.query(DATABASE_TABLE, new String[] {
                 KEY_ROWID,
@@ -111,7 +126,7 @@ public class ProductDbAdapter {
                 KEY_DESCRIPCION,
                 KEY_PESO,
                 KEY_PRECIO,
-        }, null, null, null, null, KEY_TITLE);
+        }, null, null, null, null, parametroAux);
     }
 
     /**

@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">Notepadv3</string>
-    <string name="no_notes">No Notes Yet</string>
+    <string name="app_name">NiceBuy</string>
+    <string name="no_notes">No Products Yet</string>
     <string name="action_settings">Settings</string>
-    <string name="menu_insert">Add Note</string>
-    <string name="menu_delete">Delete Note</string>
-    <string name="menu_edit">Edit Note</string>
+    <string name="menu_insert">Add Product</string>
+    <string name="menu_delete">Delete Product</string>
+    <string name="menu_edit">Edit Product</string>
     <string name="menu_email">Send email</string>
     <string name="menu_sms">Send SMS</string>
-    <string name="title">Title</string>
+    <string name="title">Nombre</string>
     <string name="ID">ID</string>
 
     <string name="body">Body</string>

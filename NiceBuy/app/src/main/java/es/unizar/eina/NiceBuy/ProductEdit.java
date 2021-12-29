@@ -37,6 +37,7 @@ public class ProductEdit extends AppCompatActivity{
         setTitle(R.string.edit_note);
 
 
+
         titulo = (EditText) findViewById(R.id.title);
         descripcion = (EditText) findViewById(R.id.descripcion);
         peso = (EditText) findViewById(R.id.peso);

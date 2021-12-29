@@ -24,8 +24,16 @@ public class ProductPad extends AppCompatActivity {
     private static final int INSERT_ID = Menu.FIRST;
     private static final int DELETE_ID = Menu.FIRST + 1;
     private static final int EDIT_ID = Menu.FIRST + 2;
-    private static final int EMAIL_ID = Menu.FIRST + 3;
-    private static final int SMS_ID = Menu.FIRST + 4;
+
+    // Ordenar nombre ascendente
+    private static final int O_N_A = Menu.FIRST + 3;
+    // Ordenar weight ascendente
+    private static final int O_W_A = Menu.FIRST + 4;
+    //Ordenadr precio ascendente
+    private static final int O_P_A = Menu.FIRST + 5;
+
+    int selectedProduct;
+    ProductDbAdapter.OrdenarPor order;
     private ProductDbAdapter mDbHelper;
     private ListView mList;
 
@@ -40,18 +48,25 @@ public class ProductPad extends AppCompatActivity {
         mDbHelper = new ProductDbAdapter(this);
         mDbHelper.open();
         mList = (ListView)findViewById(R.id.list);
-        fillData();
+        // por defecto la ordenacion es en base al nomre
+        order = ProductDbAdapter.OrdenarPor.na;
+        fillData(order);
         //SortedList<String> sortedList = new SortedList(mList);
         registerForContextMenu(mList);
 
     }
 
 
-    private void fillData () {
-        Cursor c = mDbHelper.fetchAllProducts();
+    private void fillData (ProductDbAdapter.OrdenarPor order) {
+        Cursor c = mDbHelper.fetchAllProducts(order);
         startManagingCursor(c); // deprecated method, but still works
-        String[] from = new String[] { ProductDbAdapter.KEY_TITLE };
+        String[] from = new String[] {
+                ProductDbAdapter.KEY_TITLE,
+                ProductDbAdapter.KEY_PESO,
+                ProductDbAdapter.KEY_PRECIO
+        };
 
+        // Revisar esto para meter mas text
         int[] to = new int[] { R.id.text1 };
         SimpleCursorAdapter notes =
                 new SimpleCursorAdapter(this, R.layout.notes_row, c, from, to); // deprecated, but works
@@ -64,6 +79,10 @@ public class ProductPad extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
         menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.menu_insert);
+        menu.add(Menu.NONE, O_N_A, Menu.NONE, "Order by Name");
+        menu.add(Menu.NONE, O_P_A, Menu.NONE, "Order by Price");
+        menu.add(Menu.NONE, O_W_A, Menu.NONE, "Order by Weight");
+
         return result;
     }
 
@@ -72,6 +91,15 @@ public class ProductPad extends AppCompatActivity {
         switch (item.getItemId()) {
             case INSERT_ID:
                 createProduct();
+                return true;
+            case O_N_A:
+                order = ProductDbAdapter.OrdenarPor.na;
+                return true;
+            case O_P_A:
+                order = ProductDbAdapter.OrdenarPor.pa;
+                return true;
+            case O_W_A:
+                order = ProductDbAdapter.OrdenarPor.wa;
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -83,35 +111,30 @@ public class ProductPad extends AppCompatActivity {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.menu_delete);
         menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.menu_edit);
-        menu.add(Menu.NONE, EMAIL_ID, Menu.NONE, R.string.menu_email);
-        menu.add(Menu.NONE, SMS_ID, Menu.NONE, R.string.menu_sms);
+       // menu.add(Menu.NONE, EMAIL_ID, Menu.NONE, R.string.menu_email);
+       // menu.add(Menu.NONE, SMS_ID, Menu.NONE, R.string.menu_sms);
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        selectedProduct = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
         switch(item.getItemId()) {
             case DELETE_ID:
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 mDbHelper.deleteProduct(info.id);
-                fillData();
+                fillData(order);
                 return true;
             case EDIT_ID:
                 info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 editProduct(info.position, info.id);
                 return true;
-            case EMAIL_ID:
-                info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                send(info.id, EMAIL_ID);
-                return true;
-            case SMS_ID:
-                info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                send(info.id, SMS_ID);
-                return true;
+
         }
         return super.onContextItemSelected(item);
     }
 
     private void createProduct() {
+        selectedProduct = mList.getCount();
         Intent i = new Intent(this, ProductEdit.class);
         startActivityForResult(i, ACTIVITY_CREATE);
     }
@@ -126,31 +149,13 @@ public class ProductPad extends AppCompatActivity {
         startActivityForResult(i, ACTIVITY_EDIT);
     }
 
-    private void send(long mRowId, int type) {
-
-        Cursor note = mDbHelper.fetchNote(mRowId);
-        startManagingCursor(note);
-
-        String mTitleText = (note.getString(
-                note.getColumnIndexOrThrow(ProductDbAdapter.KEY_TITLE)));
-        String mBodyText = (note.getString(
-                note.getColumnIndexOrThrow(ProductDbAdapter.KEY_DESCRIPCION)));
-
-        SendAbstractionImpl a;
-        if (type == SMS_ID)
-            a = new SendAbstractionImpl(this, "SMS");
-        else
-            a = new SendAbstractionImpl(this, "");
-
-        a.send(mTitleText, mBodyText);
-
-    }
 
 
     @Override
     protected void onActivityResult(int requestCode , int resultCode , Intent intent) {
         super.onActivityResult(requestCode , resultCode , intent);
-        fillData ();
+        fillData (order);
+        mList.setSelection(selectedProduct);
     }
 
 }
