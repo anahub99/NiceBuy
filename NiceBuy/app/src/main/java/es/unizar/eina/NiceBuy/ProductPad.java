@@ -94,13 +94,18 @@ public class ProductPad extends AppCompatActivity {
                 return true;
             case O_N_A:
                 order = ProductDbAdapter.OrdenarPor.na;
+                fillData(order);
                 return true;
             case O_P_A:
                 order = ProductDbAdapter.OrdenarPor.pa;
+                fillData(order);
                 return true;
+
             case O_W_A:
                 order = ProductDbAdapter.OrdenarPor.wa;
+                fillData(order);
                 return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
