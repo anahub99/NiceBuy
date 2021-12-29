@@ -80,7 +80,7 @@ public class ProductDbAdapter {
      * @param descripcion the body of the note
      * @return rowId or -1 if failed
      */
-    public long createProduct(String title, String peso, String precio, String descripcion ) {
+    public long createProduct(String title, String descripcion, String peso, String precio) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_TITLE, title);
         initialValues.put(KEY_PESO, peso);
@@ -107,17 +107,23 @@ public class ProductDbAdapter {
      *
      * @return Cursor over all notes
      */
-    public Cursor fetchAllProducts(OrdenarPor parametro) {
+    public Cursor fetchAllProducts(OrdenarPor parametro, boolean asc) {
     String parametroAux = null;
     switch(parametro){
         case na:
             parametroAux = KEY_TITLE;
+            if(asc) parametroAux = parametroAux+" ASC";
+            else parametroAux = parametroAux+" DESC";
             break;
         case pa:
             parametroAux = KEY_PRECIO;
+            if(asc) parametroAux = parametroAux+" ASC";
+            else parametroAux = parametroAux+" DESC";
             break;
         case wa:
             parametroAux = KEY_PESO;
+            if(asc) parametroAux = parametroAux+" ASC";
+            else parametroAux = parametroAux+" DESC";
     }
 
         return mDb.query(DATABASE_TABLE, new String[] {
@@ -164,7 +170,7 @@ public class ProductDbAdapter {
      * @param descripcion value to set note body to
      * @return true if the note was successfully updated, false otherwise
      */
-    public boolean updateProduct(long rowId, String title, String peso, String precio, String descripcion) {
+    public boolean updateProduct(long rowId, String title, String descripcion, String peso, String precio) {
         ContentValues args = new ContentValues();
         args.put(KEY_TITLE, title);
         args.put(KEY_PESO, peso);

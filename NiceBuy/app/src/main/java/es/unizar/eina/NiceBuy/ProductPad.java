@@ -27,13 +27,17 @@ public class ProductPad extends AppCompatActivity {
 
     // Ordenar nombre ascendente
     private static final int O_N_A = Menu.FIRST + 3;
+    private static final int O_N_A_D = Menu.FIRST + 4;
     // Ordenar weight ascendente
-    private static final int O_W_A = Menu.FIRST + 4;
+    private static final int O_W_A = Menu.FIRST + 5;
+    private static final int O_W_A_D = Menu.FIRST + 6;
     //Ordenadr precio ascendente
-    private static final int O_P_A = Menu.FIRST + 5;
+    private static final int O_P_A = Menu.FIRST + 7;
+    private static final int O_P_A_D = Menu.FIRST + 8;
 
     int selectedProduct;
     ProductDbAdapter.OrdenarPor order;
+    boolean asc;
     private ProductDbAdapter mDbHelper;
     private ListView mList;
 
@@ -50,15 +54,16 @@ public class ProductPad extends AppCompatActivity {
         mList = (ListView)findViewById(R.id.list);
         // por defecto la ordenacion es en base al nomre
         order = ProductDbAdapter.OrdenarPor.na;
-        fillData(order);
+        asc = true;
+        fillData(order,asc);
         //SortedList<String> sortedList = new SortedList(mList);
         registerForContextMenu(mList);
 
     }
 
 
-    private void fillData (ProductDbAdapter.OrdenarPor order) {
-        Cursor c = mDbHelper.fetchAllProducts(order);
+    private void fillData (ProductDbAdapter.OrdenarPor order, boolean asc) {
+        Cursor c = mDbHelper.fetchAllProducts(order, asc);
         startManagingCursor(c); // deprecated method, but still works
         String[] from = new String[] {
                 ProductDbAdapter.KEY_TITLE,
@@ -79,9 +84,13 @@ public class ProductPad extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
         menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.menu_insert);
-        menu.add(Menu.NONE, O_N_A, Menu.NONE, "Order by Name");
-        menu.add(Menu.NONE, O_P_A, Menu.NONE, "Order by Price");
-        menu.add(Menu.NONE, O_W_A, Menu.NONE, "Order by Weight");
+        menu.add(Menu.NONE, O_N_A, Menu.NONE, "Order by Name Asc.");
+        menu.add(Menu.NONE, O_N_A_D, Menu.NONE, "Order by Name Desc.");
+        menu.add(Menu.NONE, O_P_A, Menu.NONE, "Order by Price Asc.");
+        menu.add(Menu.NONE, O_P_A_D, Menu.NONE, "Order by Price Desc.");
+        menu.add(Menu.NONE, O_W_A, Menu.NONE, "Order by Weight Asc.");
+        menu.add(Menu.NONE, O_W_A_D, Menu.NONE, "Order by Weight Desc.");
+
 
         return result;
     }
@@ -94,16 +103,33 @@ public class ProductPad extends AppCompatActivity {
                 return true;
             case O_N_A:
                 order = ProductDbAdapter.OrdenarPor.na;
-                fillData(order);
+                asc = true;
+                fillData(order,true);
+                return true;
+            case O_N_A_D:
+                order = ProductDbAdapter.OrdenarPor.na;
+                asc = false;
+                fillData(order,false);
                 return true;
             case O_P_A:
                 order = ProductDbAdapter.OrdenarPor.pa;
-                fillData(order);
+                asc = true;
+                fillData(order,true);
                 return true;
-
+            case O_P_A_D:
+                order = ProductDbAdapter.OrdenarPor.pa;
+                asc = false;
+                fillData(order,false);
+                return true;
             case O_W_A:
                 order = ProductDbAdapter.OrdenarPor.wa;
-                fillData(order);
+                asc = true;
+                fillData(order,true);
+                return true;
+            case O_W_A_D:
+                order = ProductDbAdapter.OrdenarPor.wa;
+                asc = false;
+                fillData(order,false);
                 return true;
 
         }
@@ -127,7 +153,7 @@ public class ProductPad extends AppCompatActivity {
             case DELETE_ID:
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 mDbHelper.deleteProduct(info.id);
-                fillData(order);
+                fillData(order,asc);
                 return true;
             case EDIT_ID:
                 info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -159,7 +185,7 @@ public class ProductPad extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode , int resultCode , Intent intent) {
         super.onActivityResult(requestCode , resultCode , intent);
-        fillData (order);
+        fillData (order,asc);
         mList.setSelection(selectedProduct);
     }
 
