@@ -28,6 +28,13 @@ public class ProductDbAdapter {
     public static final String KEY_PESO = "peso";
     public static final String KEY_ROWID = "_id";
 
+    public static final String PE_KEY_TITLE = "nombrePedido";
+    public static final String PE_KEY_PRICE = "precioPedido";
+    public static final String PE_KEY_WEIGHT = "precioLista";
+
+    public static final String PE_KEY_CANTIDAD = "cantidad";
+    private static final String KEY_ROWID_PEDIDOS = "_id";
+
     public enum OrdenarPor {
         na, pa, wa
     }
@@ -37,6 +44,8 @@ public class ProductDbAdapter {
     private SQLiteDatabase mDb;
 
     private static final String DATABASE_TABLE = "productos";
+    private static final String DATABASE_TABLE_PEDIDOS = "pedidos";
+    private static final String DATABASE_TABLE_PERTENENCIA = "pertenece;";
 
     private final Context mCtx;
 
@@ -91,6 +100,9 @@ public class ProductDbAdapter {
         return mDb.insert(DATABASE_TABLE, null, initialValues);
     }
 
+
+   // public long createPedido()
+
     /**
      * Delete the note with the given rowId
      *
@@ -110,16 +122,19 @@ public class ProductDbAdapter {
     public Cursor fetchAllProducts(OrdenarPor parametro, boolean asc) {
     String parametroAux = null;
     switch(parametro){
+        //nombre ascendente
         case na:
             parametroAux = KEY_TITLE;
             if(asc) parametroAux = parametroAux+" ASC";
             else parametroAux = parametroAux+" DESC";
             break;
+            //precio ascendente
         case pa:
             parametroAux = KEY_PRECIO;
             if(asc) parametroAux = parametroAux+" ASC";
             else parametroAux = parametroAux+" DESC";
             break;
+            //peso ascendente
         case wa:
             parametroAux = KEY_PESO;
             if(asc) parametroAux = parametroAux+" ASC";
@@ -142,7 +157,7 @@ public class ProductDbAdapter {
      * @return Cursor positioned to matching note, if found
      * @throws SQLException if note could not be found/retrieved
      */
-    public Cursor fetchNote(long rowId) throws SQLException {
+    public Cursor fetchProduct(long rowId) throws SQLException {
 
         Cursor mCursor =
 
@@ -152,6 +167,29 @@ public class ProductDbAdapter {
                                 KEY_DESCRIPCION,
                         KEY_PRECIO,
                         KEY_PESO}, KEY_ROWID + "=" + rowId, null,
+                        null, null, null, null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+
+    }
+    /**
+     * Return a Cursor positioned at the note that matches the given rowId
+     *
+     * @param rowId id of note to retrieve
+     * @return Cursor positioned to matching note, if found
+     * @throws SQLException if note could not be found/retrieved
+     */
+    public Cursor fetchPedidos(long rowId) throws SQLException{
+
+        Cursor mCursor =
+
+                mDb.query(true, DATABASE_TABLE_PEDIDOS, new String[]{KEY_ROWID_PEDIDOS,
+                                PE_KEY_TITLE,
+                                PE_KEY_PRICE,
+                                PE_KEY_WEIGHT},
+                        KEY_ROWID_PEDIDOS + "=" + rowId, null,
                         null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
@@ -180,4 +218,53 @@ public class ProductDbAdapter {
 
         return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
     }
+
+
+
+
+    public Cursor FetchAllPedidos(OrdenarPor parametro, boolean asc) {
+        System.out.println("hola entre");
+        String parametroAux = null;
+        switch(parametro){
+            //nombre ascendente
+            case na:
+                parametroAux = PE_KEY_TITLE;
+                if(asc) parametroAux = parametroAux+" ASC";
+                else parametroAux = parametroAux+" DESC";
+                System.out.println("caso na");
+                break;
+            //precio ascendente
+            case pa:
+                parametroAux = PE_KEY_PRICE;
+                if(asc) parametroAux = parametroAux+" ASC";
+                else parametroAux = parametroAux+" DESC";
+                break;
+            //peso ascendente
+            case wa:
+                parametroAux = PE_KEY_WEIGHT;
+                if(asc) parametroAux = parametroAux+" ASC";
+                else parametroAux = parametroAux+" DESC";
+                break;
+        }
+        System.out.println("al final");
+        return mDb.query(DATABASE_TABLE_PEDIDOS, new String[] {
+                KEY_ROWID_PEDIDOS,
+                PE_KEY_TITLE,
+                PE_KEY_WEIGHT,
+                PE_KEY_PRICE,
+        }, null, null, null, null, parametroAux);
+    }
+
+    private int producCounter(int p[]){
+        int counter = 0;
+        for (int i = 0; i<p.length; i++){
+            if (p[i] != 0){
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+
+
 }

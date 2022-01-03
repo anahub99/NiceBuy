@@ -27,13 +27,18 @@ public class ProductPad extends AppCompatActivity {
 
     // Ordenar nombre ascendente
     private static final int O_N_A = Menu.FIRST + 3;
+    // Ordenar nombre descendente
     private static final int O_N_A_D = Menu.FIRST + 4;
     // Ordenar weight ascendente
     private static final int O_W_A = Menu.FIRST + 5;
+    // Ordenar weight descendente
     private static final int O_W_A_D = Menu.FIRST + 6;
-    //Ordenadr precio ascendente
+    // Ordenar precio ascendente
     private static final int O_P_A = Menu.FIRST + 7;
+    // Ordenar precio descendente
     private static final int O_P_A_D = Menu.FIRST + 8;
+    // Ver los pedidos
+    private static final int VER_PEDIDOS = Menu.FIRST + 9;
 
     int selectedProduct;
     ProductDbAdapter.OrdenarPor order;
@@ -90,6 +95,7 @@ public class ProductPad extends AppCompatActivity {
         menu.add(Menu.NONE, O_P_A_D, Menu.NONE, "Order by Price Desc.");
         menu.add(Menu.NONE, O_W_A, Menu.NONE, "Order by Weight Asc.");
         menu.add(Menu.NONE, O_W_A_D, Menu.NONE, "Order by Weight Desc.");
+        menu.add(Menu.NONE, VER_PEDIDOS, Menu.NONE, "Ver los pedidos");
 
 
         return result;
@@ -131,6 +137,12 @@ public class ProductPad extends AppCompatActivity {
                 asc = false;
                 fillData(order,false);
                 return true;
+            case VER_PEDIDOS:
+                System.out.println("aquihara");
+                startActivity(new Intent(ProductPad.this, PedidoPad.class));
+                finish();
+                return true;
+
 
         }
         return super.onOptionsItemSelected(item);

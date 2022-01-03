@@ -19,6 +19,18 @@ class DatabaseHelper extends SQLiteOpenHelper {
             "create table productos (_id integer primary key autoincrement, "
                     + "title text not null, descripcion text not null, precio text not null, peso text not null );";
 
+    private static final String DATABASE_CREATE_PEDIDOS =
+            "create table pedidos (_id integer primary key autoincrement, "
+                    + "nombrePedidos text not null, precioPedidos double, pesoPedidos double);";
+
+    private static final String DATABASE_CREATE_PERTENENCIA =
+            "create table pertenece (_idProducto integer, idPedidos integer, cantidad integer not null, "
+                    + "PRIMARY KEY (_idProducto, _idPedidos),"
+                    + "FOREIGN KEY (_idProducto) REFERENCES productos (_id) ON DELETE CASCADE,"
+                    + "FOREIGN KEY (_idPedidos) REFERENCES pedidos (_id) ON DELETE CASCADE);";
+
+
+
     DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -27,6 +39,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL(DATABASE_CREATE);
+        db.execSQL(DATABASE_CREATE_PEDIDOS);
+        db.execSQL(DATABASE_CREATE_PERTENENCIA);
     }
 
     @Override
@@ -34,6 +48,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
         Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                 + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS productos");
+        db.execSQL("DROP TABLE IF EXISTS pedidos");
+        db.execSQL("DROP TABLE IF EXISTS pertenece");
         onCreate(db);
     }
 

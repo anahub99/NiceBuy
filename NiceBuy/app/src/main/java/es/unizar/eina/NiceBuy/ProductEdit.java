@@ -6,10 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import android.widget.Button;
-import android.widget.TextView;
 
-
-import es.unizar.eina.NiceBuy.ProductDbAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -66,7 +63,7 @@ public class ProductEdit extends AppCompatActivity{
 
     private void populateFields() {
         if (mRowId != null) {
-            Cursor note = mDbHelper.fetchNote(mRowId);
+            Cursor note = mDbHelper.fetchProduct(mRowId);
             //noinspection deprecation
             startManagingCursor(note);
 
