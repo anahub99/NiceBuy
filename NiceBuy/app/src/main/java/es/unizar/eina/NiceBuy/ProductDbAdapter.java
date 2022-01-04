@@ -30,7 +30,7 @@ public class ProductDbAdapter {
 
     public static final String PE_KEY_TITLE = "nombrePedido";
     public static final String PE_KEY_PRICE = "precioPedido";
-    public static final String PE_KEY_WEIGHT = "precioLista";
+    public static final String PE_KEY_WEIGHT = "pesoPedido";
 
     public static final String PE_KEY_CANTIDAD = "cantidad";
     private static final String KEY_ROWID_PEDIDOS = "_id";
