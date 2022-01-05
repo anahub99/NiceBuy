@@ -70,9 +70,9 @@ public class PedidoPad extends AppCompatActivity{
         System.out.println("fillDaa, finFetchAllPedidos");
         startManagingCursor(c); // deprecated method, but still works
         String[] from = new String[] {
-                ProductDbAdapter.KEY_TITLE,
-                ProductDbAdapter.KEY_PESO,
-                ProductDbAdapter.KEY_PRECIO
+                ProductDbAdapter.PE_KEY_TITLE,
+                ProductDbAdapter.PE_KEY_WEIGHT,
+                ProductDbAdapter.PE_KEY_PRICE
         };
 
         // Revisar esto para meter mas text

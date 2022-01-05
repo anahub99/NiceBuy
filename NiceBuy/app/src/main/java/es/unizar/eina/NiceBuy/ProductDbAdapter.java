@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import es.unizar.eina.NiceBuy.DatabaseHelper;
 
 /**
@@ -28,12 +30,13 @@ public class ProductDbAdapter {
     public static final String KEY_PESO = "peso";
     public static final String KEY_ROWID = "_id";
 
+    private static final String KEY_ROWID_PEDIDOS = "_id";
     public static final String PE_KEY_TITLE = "nombrePedido";
     public static final String PE_KEY_PRICE = "precioPedido";
     public static final String PE_KEY_WEIGHT = "pesoPedido";
 
     public static final String PE_KEY_CANTIDAD = "cantidad";
-    private static final String KEY_ROWID_PEDIDOS = "_id";
+
 
     public enum OrdenarPor {
         na, pa, wa
@@ -90,14 +93,24 @@ public class ProductDbAdapter {
      * @return rowId or -1 if failed
      */
     public long createProduct(String title, String descripcion, String peso, String precio) {
-        ContentValues initialValues = new ContentValues();
-        initialValues.put(KEY_TITLE, title);
-        initialValues.put(KEY_PESO, peso);
-        initialValues.put(KEY_PRECIO, precio);
-        initialValues.put(KEY_DESCRIPCION, descripcion);
-
-
-        return mDb.insert(DATABASE_TABLE, null, initialValues);
+        if (!checkProduct(title, descripcion, peso, precio)){
+            System.out.println("Error en los datos del producto");
+            return -1;
+        }
+        else{
+            if(totalProducts() < 10000){
+                ContentValues initialValues = new ContentValues();
+                initialValues.put(KEY_TITLE, title);
+                initialValues.put(KEY_PESO, peso);
+                initialValues.put(KEY_PRECIO, precio);
+                initialValues.put(KEY_DESCRIPCION, descripcion);
+                return mDb.insert(DATABASE_TABLE, null, initialValues);
+            }
+            else{
+                System.out.println("Limte de productos alcanzado");
+                return -1;
+            }
+        }
     }
 
 
@@ -209,14 +222,20 @@ public class ProductDbAdapter {
      * @return true if the note was successfully updated, false otherwise
      */
     public boolean updateProduct(long rowId, String title, String descripcion, String peso, String precio) {
-        ContentValues args = new ContentValues();
-        args.put(KEY_TITLE, title);
-        args.put(KEY_PESO, peso);
-        args.put(KEY_PRECIO, precio);
-        args.put(KEY_DESCRIPCION, descripcion);
+       if(checkProduct(title, descripcion, peso, precio)){
+           return false;
+       }
+       else{
+           ContentValues args = new ContentValues();
+           args.put(KEY_TITLE, title);
+           args.put(KEY_PESO, peso);
+           args.put(KEY_PRECIO, precio);
+           args.put(KEY_DESCRIPCION, descripcion);
 
 
-        return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
+           return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
+       }
+
     }
 
 
@@ -265,6 +284,82 @@ public class ProductDbAdapter {
         return counter;
     }
 
+    // Devuelve un entero correspondiente al numero total de productos
+    public int totalProducts(){
+        Cursor notesCursor = fetchAllProducts(ProductDbAdapter.OrdenarPor.na, true);
+        int totalP = 0;
+        for(notesCursor.moveToFirst(); !notesCursor.isAfterLast(); notesCursor.moveToNext()) {
+            totalP++;
+        }
+        return totalP;
+    }
+
+    // Devuelve un entero correspondiente al numero total de pedidos
+    public int totalOrders(){
+        Cursor notesCursor = FetchAllPedidos(ProductDbAdapter.OrdenarPor.na, true);
+        int cuenta = 0;
+        for(notesCursor.moveToFirst(); !notesCursor.isAfterLast(); notesCursor.moveToNext()) {
+            cuenta++;
+        }
+        return cuenta;
+    }
+
+    // Devuelve TRUE si y solo si los parametros de un producto son correctos y no vacios
+    public boolean checkProduct(String title, String descripcion, String peso, String precio){
+        boolean correcto = true;
+        if (title == null || title.length() <= 0 ||
+                descripcion == null || descripcion.length() <= 0 ||
+                Double.parseDouble(peso) < 0.0 ||
+                Double.parseDouble(peso) < 0.0) correcto = false;
+        return correcto;
+
+    }
+
+    // Devuelve TRUE si y solo si los parametros de una lista son correctos
+    public boolean checkOrder(){
+        // Quizas se implementa despues
+        return  false;
+    }
+
+    public long createOrder(String tituloPedido, ArrayList<String> productos, int cuantos[]) {
+        if (totalOrders() > 99) {
+            return -1;
+        }
+
+        if (tituloPedido == null || tituloPedido.length() == 0) {
+            return -1;
+        }
+
+        ContentValues valores = new ContentValues();
+        int identificador = 0;
+        int precio = 0;
+        int peso = 0;
+
+        Cursor apuntador;
+
+
+
+
+        valores.put(PE_KEY_TITLE, tituloPedido);
+        valores.put(PE_KEY_WEIGHT, peso);
+        valores.put(PE_KEY_PRICE, precio);
+        long idRowOrder = mDb.insert(DATABASE_TABLE_PEDIDOS, null, valores);
+
+        if(productos != null){
+            // bucle para recorrer todos los productos
+            for(int i = 0; i< productos.size(); i++){
+                
+            }
+
+
+        }
+        else{
+            return idRowOrder;
+        }
+
+    return 10;
+
+    }
 
 
 }
