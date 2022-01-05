@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">NiceBuy</string>
-    <string name="no_notes">No Products Yet</string>
+    <string name="no_notes">No notes yet</string>
     <string name="action_settings">Settings</string>
     <string name="menu_insert">Add Product</string>
     <string name="menu_delete">Delete Product</string>
@@ -19,4 +19,7 @@
     <string name="descripcion">Descripcion</string>
     <string name="peso">Peso</string>
     <string name="precio">Precio</string>
+    <string name="no_products">Sin productos</string>
+    <string name="no_pedidos">Sin pedidos</string>
+    <string name="add_product_pedido">Añadir producto al pedido</string>
 </resources>

@@ -9,18 +9,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ListIterator;
+
 @SuppressWarnings("ALL")
-public class ProductsInPedidoPad extends AppCompatActivity {
+public class AddProductToPedido extends AppCompatActivity {
 
-    private EditText nombrePedido;
-
-    private static final int ADD_PRODUCT=0;
+    private static final int ACTIVITY_CREATE=0;
     private static final int ACTIVITY_EDIT=1;
 
     private static final int INSERT_ID = Menu.FIRST;
@@ -47,65 +46,45 @@ public class ProductsInPedidoPad extends AppCompatActivity {
     boolean asc;
     private ProductDbAdapter mDbHelper;
     private ListView mList;
-    private Long pedidoId;
 
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        System.out.println("editar pedido");
+
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.add_product);
+
         mDbHelper = new ProductDbAdapter(this);
         mDbHelper.open();
-
-        setContentView(R.layout.pedido_edit);
-        setTitle("Edit pedido");
-
-        nombrePedido = (EditText) findViewById(R.id.title);
         mList = (ListView)findViewById(R.id.list);
-
-        Button confirmButton = (Button) findViewById(R.id.confirm);
-
         // por defecto la ordenacion es en base al nomre
         order = ProductDbAdapter.OrdenarPor.na;
         asc = true;
-        pedidoId = (savedInstanceState == null) ? null :
-                (Long) savedInstanceState.getSerializable(ProductDbAdapter.KEY_ROWID_PEDIDOS);
-        if (pedidoId == null) {
-            Bundle extras = getIntent().getExtras();
-            pedidoId = (extras != null) ?
-                    extras.getLong(ProductDbAdapter.KEY_ROWID_PEDIDOS) : null;
-        }
-        fillData();
+        fillData(order,asc);
         //SortedList<String> sortedList = new SortedList(mList);
         registerForContextMenu(mList);
-
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-                //setResult(RESULT_OK);
-                finish();
-            }
-
-        });
 
     }
 
 
-    private void fillData () {
-        if(pedidoId != null) {
-            Cursor c = mDbHelper.fetchProductosDePedido(pedidoId, order, asc);
-            startManagingCursor(c); // deprecated method, but still works
-            String[] from = new String[]{
-                    ProductDbAdapter.KEY_TITLE,
-            };
+    private void fillData (ProductDbAdapter.OrdenarPor order, boolean asc) {
+        Cursor c = mDbHelper.fetchAllProducts(order, asc);
+        startManagingCursor(c); // deprecated method, but still works
+        String[] from = new String[] {
+                ProductDbAdapter.KEY_TITLE,
+                ProductDbAdapter.KEY_PESO,
+                ProductDbAdapter.KEY_PRECIO,
+                ProductDbAdapter.KEY_ROWID
+        };
 
-            // Revisar esto para meter mas text
-            int[] to = new int[]{R.id.text1};
-            SimpleCursorAdapter notes =
-                    new SimpleCursorAdapter(this, R.layout.notes_row, c, from, to); // deprecated, but works
-            mList.setAdapter(notes);
-        }
+        // Revisar esto para meter mas text
+        int[] to = new int[] { R.id.text1, R.id.text2, R.id.text3, R.id.button };
+        SimpleCursorAdapter notes =
+                new SimpleCursorAdapter(this, R.layout.add_product_row, c, from, to); // deprecated, but works
+        mList.setAdapter(notes);
+
+
     }
 
 
@@ -114,7 +93,7 @@ public class ProductsInPedidoPad extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.add_product_pedido);
+        menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.menu_insert);
         menu.add(Menu.NONE, O_N_A, Menu.NONE, "Order by Name Asc.");
         menu.add(Menu.NONE, O_N_A_D, Menu.NONE, "Order by Name Desc.");
         menu.add(Menu.NONE, O_P_A, Menu.NONE, "Order by Price Asc.");
@@ -131,41 +110,41 @@ public class ProductsInPedidoPad extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case INSERT_ID:
-                addProduct();
+                createProduct();
                 return true;
             case O_N_A:
                 order = ProductDbAdapter.OrdenarPor.na;
                 asc = true;
-                fillData();
+                fillData(order,true);
                 return true;
             case O_N_A_D:
                 order = ProductDbAdapter.OrdenarPor.na;
                 asc = false;
-                fillData();
+                fillData(order,false);
                 return true;
             case O_P_A:
                 order = ProductDbAdapter.OrdenarPor.pa;
                 asc = true;
-                fillData();
+                fillData(order,true);
                 return true;
             case O_P_A_D:
                 order = ProductDbAdapter.OrdenarPor.pa;
                 asc = false;
-                fillData();
+                fillData(order,false);
                 return true;
             case O_W_A:
                 order = ProductDbAdapter.OrdenarPor.wa;
                 asc = true;
-                fillData();
+                fillData(order,true);
                 return true;
             case O_W_A_D:
                 order = ProductDbAdapter.OrdenarPor.wa;
                 asc = false;
-                fillData();
+                fillData(order,false);
                 return true;
             case VER_PEDIDOS:
                 System.out.println("aquihara");
-                startActivity(new Intent(ProductsInPedidoPad.this, PedidoPad.class));
+                startActivity(new Intent(AddProductToPedido.this, PedidoPad.class));
                 finish();
                 return true;
 
@@ -191,7 +170,7 @@ public class ProductsInPedidoPad extends AppCompatActivity {
             case DELETE_ID:
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 mDbHelper.deleteProduct(info.id);
-                fillData();
+                fillData(order,asc);
                 return true;
             case EDIT_ID:
                 info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -202,10 +181,10 @@ public class ProductsInPedidoPad extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
-    private void addProduct() {
+    private void createProduct() {
         selectedProduct = mList.getCount();
-        Intent i = new Intent(this, AddProductToPedido.class);
-        startActivityForResult(i, ADD_PRODUCT);
+        Intent i = new Intent(this, ProductEdit.class);
+        startActivityForResult(i, ACTIVITY_CREATE);
     }
 
 
@@ -220,52 +199,17 @@ public class ProductsInPedidoPad extends AppCompatActivity {
 
 
 
-    /*@Override
+    @Override
     protected void onActivityResult(int requestCode , int resultCode , Intent intent) {
         super.onActivityResult(requestCode , resultCode , intent);
-        fillData ();
+        fillData (order,asc);
         mList.setSelection(selectedProduct);
-    }*/
-
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        saveState();
-        outState.putSerializable(ProductDbAdapter.KEY_ROWID_PEDIDOS, pedidoId);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        saveState();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (pedidoId != null) {
-            Cursor pedido = mDbHelper.fetchPedido(pedidoId);
-            //noinspection deprecation
-            startManagingCursor(pedido);
-
-            nombrePedido.setText(pedido.getString(
-                    pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_TITLE)));
-
-            fillData();
-        }
-    }
-
-    private void saveState() {
-        String name = nombrePedido.getText().toString();
-        if (pedidoId == null) {
-            long id = mDbHelper.crearPedido(name);
-            if (id > 0) {
-                pedidoId = id;
-            }
-        } else {
-            mDbHelper.updatePedido(name, pedidoId);
-        }
+    public void addProduct(View view) {
+        // Do something in response to button click
+        Button b = (Button) view;
+        System.out.println("text "+b.getText());
     }
 
 
