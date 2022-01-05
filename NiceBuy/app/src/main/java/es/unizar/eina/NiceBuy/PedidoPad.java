@@ -71,10 +71,12 @@ public class PedidoPad extends AppCompatActivity{
         startManagingCursor(c); // deprecated method, but still works
         String[] from = new String[] {
                 ProductDbAdapter.PE_KEY_TITLE,
+                ProductDbAdapter.PE_KEY_WEIGHT,
+                ProductDbAdapter.PE_KEY_PRICE
         };
 
         // Revisar esto para meter mas text
-        int[] to = new int[] { R.id.text1 };
+        int[] to = new int[] { R.id.text1, R.id.text2, R.id.text3 };
         SimpleCursorAdapter notes =
                 new SimpleCursorAdapter(this, R.layout.notes_row, c, from, to); // deprecated, but works
         mList.setAdapter(notes); }
