@@ -7,6 +7,7 @@ import android.view.View;
 
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 
@@ -44,6 +45,23 @@ public class PedidoEdit extends AppCompatActivity{
         String[] camposSHow = new String[]{ProductDbAdapter.KEY_TITLE};
         //comprobar
         int[] hacia = new int[] {10000};
+
+/*
+        Cursor c = mDbHelper.fetchAllProducts(order, asc);
+        startManagingCursor(c); // deprecated method, but still works
+        String[] from = new String[] {
+                ProductDbAdapter.KEY_TITLE,
+                ProductDbAdapter.KEY_PESO,
+                ProductDbAdapter.KEY_PRECIO
+        };
+
+        // Revisar esto para meter mas text
+        int[] to = new int[] { R.id.text1 };
+        SimpleCursorAdapter notes =
+                new SimpleCursorAdapter(this, R.layout.notes_row, c, from, to); // deprecated, but works
+        mList.setAdapter(notes);
+
+        */
 
     }
 

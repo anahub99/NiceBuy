@@ -18,8 +18,8 @@ import android.widget.SimpleCursorAdapter;
 
 @SuppressWarnings("ALL")
 public class PedidoPad extends AppCompatActivity{
-    private static final int ACTIVITY_CREATE=0;
-    private static final int ACTIVITY_EDIT=1;
+    private static final int PEDIDO_CREATE=2;
+    private static final int PEDIDO_EDIT=3;
 
     private static final int INSERT_ID = Menu.FIRST;
     private static final int DELETE_ID = Menu.FIRST + 1;
@@ -50,7 +50,7 @@ public class PedidoPad extends AppCompatActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.product_pad);
+        setContentView(R.layout.pedido_pad);
         mDbHelper = new ProductDbAdapter(this);
         mDbHelper.open();
         mList = (ListView)findViewById(R.id.list);
@@ -58,21 +58,19 @@ public class PedidoPad extends AppCompatActivity{
         order = ProductDbAdapter.OrdenarPor.na;
         asc = true;
         System.out.println("Oncreate, antesFilldata");
-        fillData(order,asc);
+        fillData();
         //SortedList<String> sortedList = new SortedList(mList);
         registerForContextMenu(mList);
         System.out.println("Oncreate, fin");
 
     }
 
-    private void fillData (ProductDbAdapter.OrdenarPor order, boolean asc) {
+    private void fillData () {
         Cursor c = mDbHelper.FetchAllPedidos(order, asc);
         System.out.println("fillDaa, finFetchAllPedidos");
         startManagingCursor(c); // deprecated method, but still works
         String[] from = new String[] {
                 ProductDbAdapter.PE_KEY_TITLE,
-                ProductDbAdapter.PE_KEY_WEIGHT,
-                ProductDbAdapter.PE_KEY_PRICE
         };
 
         // Revisar esto para meter mas text
@@ -101,37 +99,37 @@ public class PedidoPad extends AppCompatActivity{
         public boolean onOptionsItemSelected(MenuItem item) {
             switch (item.getItemId()) {
                 case INSERT_ID:
-                    createProduct();
+                    createPedido();
                     return true;
                 case PE_O_N_A:
                     order = ProductDbAdapter.OrdenarPor.na;
                     asc = true;
-                    fillData(order,true);
+                    fillData();
                     return true;
                 case PE_O_N_A_D:
                     order = ProductDbAdapter.OrdenarPor.na;
                     asc = false;
-                    fillData(order,false);
+                    fillData();
                     return true;
                 case PE_O_P_A:
                     order = ProductDbAdapter.OrdenarPor.pa;
                     asc = true;
-                    fillData(order,true);
+                    fillData();
                     return true;
                 case PE_O_P_A_D:
                     order = ProductDbAdapter.OrdenarPor.pa;
                     asc = false;
-                    fillData(order,false);
+                    fillData();
                     return true;
                 case PE_O_W_A:
                     order = ProductDbAdapter.OrdenarPor.wa;
                     asc = true;
-                    fillData(order,true);
+                    fillData();
                     return true;
                 case PE_O_W_A_D:
                     order = ProductDbAdapter.OrdenarPor.wa;
                     asc = false;
-                    fillData(order,false);
+                    fillData();
                     return true;
                 case VER_PRODUCTOS:
                     startActivity(new Intent(PedidoPad.this, ProductPad.class));
@@ -159,39 +157,42 @@ public class PedidoPad extends AppCompatActivity{
             switch(item.getItemId()) {
                 case DELETE_ID:
                     AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                    mDbHelper.deleteProduct(info.id);
-                    fillData(order,asc);
+                    mDbHelper.deletePedido(info.id);
+                    fillData();
                     return true;
                 case EDIT_ID:
                     info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                    editProduct(info.position, info.id);
+                    editPedido(info.position, info.id);
                     return true;
 
             }
             return super.onContextItemSelected(item);
         }
 
-        private void createProduct() {
+        private void createPedido() {
             selectedProduct = mList.getCount();
-            Intent i = new Intent(this, ProductEdit.class);
-            startActivityForResult(i, ACTIVITY_CREATE);
+            Intent i = new Intent(this, ProductsInPedidoPad.class);
+            startActivityForResult(i, PEDIDO_CREATE);
         }
 
-        protected void editProduct(int position, long id) {
+        protected void editPedido(int position, long id) {
 
-            Intent i = new Intent(this, ProductEdit.class);
-            i.putExtra(ProductDbAdapter.KEY_ROWID, id);
+            Intent i = new Intent(this, ProductsInPedidoPad.class);
+            i.putExtra(ProductDbAdapter.KEY_ROWID_PEDIDOS, id);
 
             //noinspection deprecation
-            startActivityForResult(i, ACTIVITY_EDIT);
+            startActivityForResult(i, PEDIDO_EDIT);
         }
 
 
 
         @Override
         protected void onActivityResult(int requestCode , int resultCode , Intent intent) {
+            System.out.println("terminar crear pedido");
             super.onActivityResult(requestCode , resultCode , intent);
-            fillData (order,asc);
+            System.out.println("terminar crear pedido2");
+            fillData();
+            System.out.println("terminar crear pedido3");
             mList.setSelection(selectedProduct);
         }
 

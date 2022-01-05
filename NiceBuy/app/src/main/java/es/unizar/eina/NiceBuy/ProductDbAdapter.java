@@ -5,12 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
-
-import es.unizar.eina.NiceBuy.DatabaseHelper;
 
 /**
  * Simple notes database access helper class. Defines the basic CRUD operations
@@ -30,12 +26,17 @@ public class ProductDbAdapter {
     public static final String KEY_PESO = "peso";
     public static final String KEY_ROWID = "_id";
 
-    private static final String KEY_ROWID_PEDIDOS = "_id";
+    public static final String KEY_ROWID_PEDIDOS = "_id";
     public static final String PE_KEY_TITLE = "nombrePedido";
     public static final String PE_KEY_PRICE = "precioPedido";
     public static final String PE_KEY_WEIGHT = "pesoPedido";
 
     public static final String PE_KEY_CANTIDAD = "cantidad";
+
+    public static final String PERT_PRODUCTO = "_idProducto";
+    public static final String PERT_PEDIDO = "_idPedidos";
+    public static final String PERT_CANTIDAD = "cantidad";
+
 
 
     public enum OrdenarPor {
@@ -194,7 +195,7 @@ public class ProductDbAdapter {
      * @return Cursor positioned to matching note, if found
      * @throws SQLException if note could not be found/retrieved
      */
-    public Cursor fetchPedidos(long rowId) throws SQLException{
+    public Cursor fetchPedido(long rowId) throws SQLException{
 
         Cursor mCursor =
 
@@ -315,6 +316,8 @@ public class ProductDbAdapter {
 
     }
 
+
+
     // Devuelve TRUE si y solo si los parametros de una lista son correctos
     public boolean checkOrder(){
         // Quizas se implementa despues
@@ -360,6 +363,103 @@ public class ProductDbAdapter {
     return 10;
 
     }
+
+    public long crearPedido(String nombre){
+
+        if (nombre == null || nombre == ""){
+            System.out.println("Error en los datos del producto");
+            return -1;
+        }
+        else {
+            if (totalOrders() < 100) {
+                ContentValues initialValues = new ContentValues();
+                initialValues.put(PE_KEY_TITLE, nombre);
+                initialValues.put(PE_KEY_PRICE, 0.0);
+                initialValues.put(PE_KEY_WEIGHT, 0.0);
+                return mDb.insert(DATABASE_TABLE_PEDIDOS, null, initialValues);
+            } else {
+                System.out.println("Limte de pedidos alcanzado");
+                return -1;
+            }
+        }
+    }
+
+    /**
+     * Delete the note with the given rowId
+     *
+     * @param rowId id of note to delete
+     * @return true if deleted, false otherwise
+     */
+    public boolean deletePedido(long rowId) {
+
+        return ((mDb.delete(DATABASE_TABLE_PERTENENCIA, PERT_PEDIDO + "=" + rowId, null) > 0)
+                & (mDb.delete(DATABASE_TABLE_PEDIDOS, KEY_ROWID + "=" + rowId, null) > 0));
+
+    }
+
+
+    public boolean updatePedido(String nombre, long pedidoId){
+        if (nombre == null || nombre == ""){
+            return false;
+        }
+        else{
+            ContentValues args = new ContentValues();
+            args.put(PE_KEY_TITLE, nombre);
+            args.put(PE_KEY_PRICE, 0.0);
+            args.put(PE_KEY_WEIGHT, 0.0);
+
+            return mDb.update(DATABASE_TABLE_PEDIDOS, args, KEY_ROWID + "=" + pedidoId, null) > 0;
+        }
+    }
+
+
+    public long anyadirProductoAPedido(long idProducto, long idPedido, int cantidad) {
+            ContentValues initialValues = new ContentValues();
+            initialValues.put(PERT_PRODUCTO, idProducto);
+            initialValues.put(PERT_PEDIDO, idPedido);
+            initialValues.put(PERT_CANTIDAD, cantidad);
+            return mDb.insert(DATABASE_TABLE, null, initialValues);
+    }
+
+
+    public Cursor fetchProductosDePedido(Long idPedido, OrdenarPor parametro, boolean asc) {
+
+        if(idPedido == null) return null;
+
+        String parametroAux = null;
+        switch(parametro){
+            //nombre ascendente
+            case na:
+                parametroAux = KEY_TITLE;
+                if(asc) parametroAux = parametroAux+" ASC";
+                else parametroAux = parametroAux+" DESC";
+                break;
+            //precio ascendente
+            case pa:
+                parametroAux = KEY_PRECIO;
+                if(asc) parametroAux = parametroAux+" ASC";
+                else parametroAux = parametroAux+" DESC";
+                break;
+            //peso ascendente
+            case wa:
+                parametroAux = KEY_PESO;
+                if(asc) parametroAux = parametroAux+" ASC";
+                else parametroAux = parametroAux+" DESC";
+        }
+
+        String seleccionarProductos = "SELECT * FROM pertenece, productos WHERE"
+                + " productos._id=_idProducto AND _idPedidos=?"
+                + " ORDER BY ?";
+        System.out.println("seleccionar productos");
+        return mDb.rawQuery(seleccionarProductos, new String[]{String.valueOf(idPedido), parametroAux});
+    }
+
+
+
+
+
+
+
 
 
 }
