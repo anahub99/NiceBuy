@@ -27,20 +27,8 @@ public class ProductsInPedidoPad extends AppCompatActivity {
     private static final int DELETE_ID = Menu.FIRST + 1;
     private static final int EDIT_ID = Menu.FIRST + 2;
 
-    // Ordenar nombre ascendente
-    private static final int O_N_A = Menu.FIRST + 3;
-    // Ordenar nombre descendente
-    private static final int O_N_A_D = Menu.FIRST + 4;
-    // Ordenar weight ascendente
-    private static final int O_W_A = Menu.FIRST + 5;
-    // Ordenar weight descendente
-    private static final int O_W_A_D = Menu.FIRST + 6;
-    // Ordenar precio ascendente
-    private static final int O_P_A = Menu.FIRST + 7;
-    // Ordenar precio descendente
-    private static final int O_P_A_D = Menu.FIRST + 8;
     // Ver los pedidos
-    private static final int VER_PEDIDOS = Menu.FIRST + 9;
+    private static final int VER_PEDIDOS = Menu.FIRST + 3;
 
     int selectedProduct;
     ProductDbAdapter.OrdenarPor order;
@@ -98,10 +86,12 @@ public class ProductsInPedidoPad extends AppCompatActivity {
             startManagingCursor(c); // deprecated method, but still works
             String[] from = new String[]{
                     ProductDbAdapter.KEY_TITLE,
+                    ProductDbAdapter.KEY_PESO,
+                    ProductDbAdapter.KEY_PRECIO
             };
 
             // Revisar esto para meter mas text
-            int[] to = new int[]{R.id.text1};
+            int[] to = new int[]{R.id.text1, R.id.text2, R.id.text3};
             SimpleCursorAdapter notes =
                     new SimpleCursorAdapter(this, R.layout.notes_row, c, from, to); // deprecated, but works
             mList.setAdapter(notes);
@@ -115,12 +105,6 @@ public class ProductsInPedidoPad extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
         menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.add_product_pedido);
-        menu.add(Menu.NONE, O_N_A, Menu.NONE, "Order by Name Asc.");
-        menu.add(Menu.NONE, O_N_A_D, Menu.NONE, "Order by Name Desc.");
-        menu.add(Menu.NONE, O_P_A, Menu.NONE, "Order by Price Asc.");
-        menu.add(Menu.NONE, O_P_A_D, Menu.NONE, "Order by Price Desc.");
-        menu.add(Menu.NONE, O_W_A, Menu.NONE, "Order by Weight Asc.");
-        menu.add(Menu.NONE, O_W_A_D, Menu.NONE, "Order by Weight Desc.");
         menu.add(Menu.NONE, VER_PEDIDOS, Menu.NONE, "Ver los pedidos");
 
 
@@ -132,36 +116,6 @@ public class ProductsInPedidoPad extends AppCompatActivity {
         switch (item.getItemId()) {
             case INSERT_ID:
                 addProduct();
-                return true;
-            case O_N_A:
-                order = ProductDbAdapter.OrdenarPor.na;
-                asc = true;
-                fillData();
-                return true;
-            case O_N_A_D:
-                order = ProductDbAdapter.OrdenarPor.na;
-                asc = false;
-                fillData();
-                return true;
-            case O_P_A:
-                order = ProductDbAdapter.OrdenarPor.pa;
-                asc = true;
-                fillData();
-                return true;
-            case O_P_A_D:
-                order = ProductDbAdapter.OrdenarPor.pa;
-                asc = false;
-                fillData();
-                return true;
-            case O_W_A:
-                order = ProductDbAdapter.OrdenarPor.wa;
-                asc = true;
-                fillData();
-                return true;
-            case O_W_A_D:
-                order = ProductDbAdapter.OrdenarPor.wa;
-                asc = false;
-                fillData();
                 return true;
             case VER_PEDIDOS:
                 System.out.println("aquihara");
@@ -205,6 +159,7 @@ public class ProductsInPedidoPad extends AppCompatActivity {
     private void addProduct() {
         selectedProduct = mList.getCount();
         Intent i = new Intent(this, AddProductToPedido.class);
+        i.putExtra(ProductDbAdapter.KEY_ROWID_PEDIDOS, pedidoId);
         startActivityForResult(i, ADD_PRODUCT);
     }
 

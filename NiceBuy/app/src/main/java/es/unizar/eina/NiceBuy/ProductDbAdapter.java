@@ -49,7 +49,7 @@ public class ProductDbAdapter {
 
     private static final String DATABASE_TABLE = "productos";
     private static final String DATABASE_TABLE_PEDIDOS = "pedidos";
-    private static final String DATABASE_TABLE_PERTENENCIA = "pertenece;";
+    private static final String DATABASE_TABLE_PERTENENCIA = "pertenece";
 
     private final Context mCtx;
 
@@ -413,12 +413,13 @@ public class ProductDbAdapter {
     }
 
 
-    public long anyadirProductoAPedido(long idProducto, long idPedido, int cantidad) {
+    public long anyadirProductoAPedido(Long idProducto, Long idPedido, int cantidad) {
+            System.out.println("param long "+idProducto);
             ContentValues initialValues = new ContentValues();
             initialValues.put(PERT_PRODUCTO, idProducto);
             initialValues.put(PERT_PEDIDO, idPedido);
             initialValues.put(PERT_CANTIDAD, cantidad);
-            return mDb.insert(DATABASE_TABLE, null, initialValues);
+            return mDb.insert(DATABASE_TABLE_PERTENENCIA, null, initialValues);
     }
 
 

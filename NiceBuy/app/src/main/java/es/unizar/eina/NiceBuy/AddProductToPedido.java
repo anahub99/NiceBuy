@@ -23,30 +23,14 @@ public class AddProductToPedido extends AppCompatActivity {
     private static final int ACTIVITY_EDIT=1;
 
     private static final int INSERT_ID = Menu.FIRST;
-    private static final int DELETE_ID = Menu.FIRST + 1;
-    private static final int EDIT_ID = Menu.FIRST + 2;
-
-    // Ordenar nombre ascendente
-    private static final int O_N_A = Menu.FIRST + 3;
-    // Ordenar nombre descendente
-    private static final int O_N_A_D = Menu.FIRST + 4;
-    // Ordenar weight ascendente
-    private static final int O_W_A = Menu.FIRST + 5;
-    // Ordenar weight descendente
-    private static final int O_W_A_D = Menu.FIRST + 6;
-    // Ordenar precio ascendente
-    private static final int O_P_A = Menu.FIRST + 7;
-    // Ordenar precio descendente
-    private static final int O_P_A_D = Menu.FIRST + 8;
-    // Ver los pedidos
-    private static final int VER_PEDIDOS = Menu.FIRST + 9;
+    private static final int VER_PEDIDOS = Menu.FIRST + 2;
 
     int selectedProduct;
     ProductDbAdapter.OrdenarPor order;
     boolean asc;
     private ProductDbAdapter mDbHelper;
     private ListView mList;
-
+    private Long pedidoId;
 
     /** Called when the activity is first created. */
     @Override
@@ -63,7 +47,10 @@ public class AddProductToPedido extends AppCompatActivity {
         asc = true;
         fillData(order,asc);
         //SortedList<String> sortedList = new SortedList(mList);
-        registerForContextMenu(mList);
+
+        Bundle extras = getIntent().getExtras();
+        pedidoId = (extras != null) ?
+                extras.getLong(ProductDbAdapter.KEY_ROWID_PEDIDOS) : null;
 
     }
 
@@ -93,15 +80,7 @@ public class AddProductToPedido extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.menu_insert);
-        menu.add(Menu.NONE, O_N_A, Menu.NONE, "Order by Name Asc.");
-        menu.add(Menu.NONE, O_N_A_D, Menu.NONE, "Order by Name Desc.");
-        menu.add(Menu.NONE, O_P_A, Menu.NONE, "Order by Price Asc.");
-        menu.add(Menu.NONE, O_P_A_D, Menu.NONE, "Order by Price Desc.");
-        menu.add(Menu.NONE, O_W_A, Menu.NONE, "Order by Weight Asc.");
-        menu.add(Menu.NONE, O_W_A_D, Menu.NONE, "Order by Weight Desc.");
         menu.add(Menu.NONE, VER_PEDIDOS, Menu.NONE, "Ver los pedidos");
-
 
         return result;
     }
@@ -112,74 +91,16 @@ public class AddProductToPedido extends AppCompatActivity {
             case INSERT_ID:
                 createProduct();
                 return true;
-            case O_N_A:
-                order = ProductDbAdapter.OrdenarPor.na;
-                asc = true;
-                fillData(order,true);
-                return true;
-            case O_N_A_D:
-                order = ProductDbAdapter.OrdenarPor.na;
-                asc = false;
-                fillData(order,false);
-                return true;
-            case O_P_A:
-                order = ProductDbAdapter.OrdenarPor.pa;
-                asc = true;
-                fillData(order,true);
-                return true;
-            case O_P_A_D:
-                order = ProductDbAdapter.OrdenarPor.pa;
-                asc = false;
-                fillData(order,false);
-                return true;
-            case O_W_A:
-                order = ProductDbAdapter.OrdenarPor.wa;
-                asc = true;
-                fillData(order,true);
-                return true;
-            case O_W_A_D:
-                order = ProductDbAdapter.OrdenarPor.wa;
-                asc = false;
-                fillData(order,false);
-                return true;
             case VER_PEDIDOS:
                 System.out.println("aquihara");
                 startActivity(new Intent(AddProductToPedido.this, PedidoPad.class));
                 finish();
                 return true;
 
-
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.menu_delete);
-        menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.menu_edit);
-       // menu.add(Menu.NONE, EMAIL_ID, Menu.NONE, R.string.menu_email);
-       // menu.add(Menu.NONE, SMS_ID, Menu.NONE, R.string.menu_sms);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        selectedProduct = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
-        switch(item.getItemId()) {
-            case DELETE_ID:
-                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                mDbHelper.deleteProduct(info.id);
-                fillData(order,asc);
-                return true;
-            case EDIT_ID:
-                info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                editProduct(info.position, info.id);
-                return true;
-
-        }
-        return super.onContextItemSelected(item);
-    }
 
     private void createProduct() {
         selectedProduct = mList.getCount();
@@ -209,7 +130,13 @@ public class AddProductToPedido extends AppCompatActivity {
     public void addProduct(View view) {
         // Do something in response to button click
         Button b = (Button) view;
+        //System.out.println("text "+((String) b.getText()));
+        Long productId = Long.parseLong((String) b.getText());
+        System.out.println("pedidoId "+pedidoId);
+        System.out.println("productId "+productId);
+        mDbHelper.anyadirProductoAPedido(productId,pedidoId,1);
         System.out.println("text "+b.getText());
+
     }
 
 

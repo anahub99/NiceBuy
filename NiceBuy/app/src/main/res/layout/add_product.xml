@@ -7,6 +7,7 @@
         android:layout_height="wrap_content"
         android:text="@string/add_product_pedido"
         android:textSize="25sp" />
+
     <ListView
         android:id="@+id/list"
         android:layout_width="wrap_content"
@@ -14,6 +15,6 @@
     <TextView android:id="@+id/empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_products"/>
+        android:text="@string/no_notes"/>
 
 </LinearLayout>
