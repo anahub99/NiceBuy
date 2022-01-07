@@ -19,11 +19,11 @@ import java.util.ListIterator;
 @SuppressWarnings("ALL")
 public class AddProductToPedido extends AppCompatActivity {
 
-    private static final int ACTIVITY_CREATE=0;
+    private static final int ACTIVITY_ADD_PRODUCT=0;
     private static final int ACTIVITY_EDIT=1;
 
     private static final int INSERT_ID = Menu.FIRST;
-    private static final int VER_PEDIDOS = Menu.FIRST + 2;
+    private static final int VER_PEDIDO = Menu.FIRST + 2;
 
     int selectedProduct;
     ProductDbAdapter.OrdenarPor order;
@@ -51,6 +51,13 @@ public class AddProductToPedido extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         pedidoId = (extras != null) ?
                 extras.getLong(ProductDbAdapter.KEY_ROWID_PEDIDOS) : null;
+
+        Button backButton = (Button) findViewById(R.id.back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) { setResult(RESULT_OK);
+                finish ();
+            }
+        });
 
     }
 
@@ -80,33 +87,30 @@ public class AddProductToPedido extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(Menu.NONE, VER_PEDIDOS, Menu.NONE, "Ver los pedidos");
-
+        menu.add(Menu.NONE, VER_PEDIDO, Menu.NONE, "Ver los pedidos");
         return result;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case INSERT_ID:
-                createProduct();
-                return true;
-            case VER_PEDIDOS:
+            case VER_PEDIDO:
                 System.out.println("aquihara");
-                startActivity(new Intent(AddProductToPedido.this, PedidoPad.class));
+                Intent i = new Intent(this, ProductsInPedidoPad.class);
+                i.putExtra(ProductDbAdapter.KEY_ROWID_PEDIDOS, pedidoId);
+                startActivity(i);
                 finish();
                 return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-    private void createProduct() {
+   /* private void createProduct() {
         selectedProduct = mList.getCount();
         Intent i = new Intent(this, ProductEdit.class);
         startActivityForResult(i, ACTIVITY_CREATE);
-    }
+    }*/
 
 
     protected void editProduct(int position, long id) {
@@ -132,10 +136,15 @@ public class AddProductToPedido extends AppCompatActivity {
         Button b = (Button) view;
         //System.out.println("text "+((String) b.getText()));
         Long productId = Long.parseLong((String) b.getText());
-        System.out.println("pedidoId "+pedidoId);
-        System.out.println("productId "+productId);
-        mDbHelper.anyadirProductoAPedido(productId,pedidoId,1);
-        System.out.println("text "+b.getText());
+        //mDbHelper.anyadirProductoAPedido(productId,pedidoId,1);
+
+        Intent i = new Intent(this, ElegirCantidadProductoEnPedido.class);
+        i.putExtra(ProductDbAdapter.PERT_PEDIDO, pedidoId);
+        i.putExtra(ProductDbAdapter.PERT_PRODUCTO, productId);
+
+        //noinspection deprecation
+        startActivityForResult(i, ACTIVITY_ADD_PRODUCT);
+
 
     }
 

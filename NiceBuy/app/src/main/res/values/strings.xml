@@ -22,4 +22,9 @@
     <string name="no_products">Sin productos</string>
     <string name="no_pedidos">Sin pedidos</string>
     <string name="add_product_pedido">Añadir producto al pedido</string>
+    <string name="cantidad">Cantidad</string>
+    <string name="change_quantity">Cambiar cantidad</string>
+    <string name="telephone">Número de teléfono</string>
+    <string name="date">Fecha límite (formato dd-mm-yyyy)</string>
+    <string name="back">Volver</string>
 </resources>

@@ -7,16 +7,22 @@
         <entry key="..\:/practicas/GitHub/NiceBuy/NiceBuy/app/src/main/res/layout/activity_notepadv3.xml" value="0.29030797101449274" />
         <entry key="..\:/practicas/GitHub/NiceBuy/NiceBuy/app/src/main/res/layout/add_product.xml" value="0.18" />
         <entry key="..\:/practicas/GitHub/NiceBuy/NiceBuy/app/src/main/res/layout/add_product_row.xml" value="0.5" />
+        <entry key="..\:/practicas/GitHub/NiceBuy/NiceBuy/app/src/main/res/layout/elegir_cantidad.xml" value="0.245018115942029" />
         <entry key="..\:/practicas/GitHub/NiceBuy/NiceBuy/app/src/main/res/layout/note_edit.xml" value="0.25407608695652173" />
         <entry key="..\:/practicas/GitHub/NiceBuy/NiceBuy/app/src/main/res/layout/notes_row.xml" value="0.35104166666666664" />
-        <entry key="..\:/practicas/GitHub/NiceBuy/NiceBuy/app/src/main/res/layout/pedido_edit.xml" value="0.16168478260869565" />
+        <entry key="..\:/practicas/GitHub/NiceBuy/NiceBuy/app/src/main/res/layout/pedido_edit.xml" value="0.25" />
         <entry key="..\:/practicas/GitHub/NiceBuy/NiceBuy/app/src/main/res/layout/pedido_pad.xml" value="0.16666666666666666" />
+        <entry key="..\:/practicas/GitHub/NiceBuy/NiceBuy/app/src/main/res/layout/pedido_row.xml" value="0.23052536231884058" />
         <entry key="..\:/practicas/GitHub/NiceBuy/NiceBuy/app/src/main/res/layout/product_edit.xml" value="0.16168478260869565" />
+        <entry key="..\:/practicas/GitHub/NiceBuy/NiceBuy/app/src/main/res/layout/product_in_pedido.xml" value="0.2726449275362319" />
         <entry key="..\:/practicas/GitHub/NiceBuy/NiceBuy/app/src/main/res/layout/product_pad.xml" value="0.17844202898550723" />
         <entry key="..\:/practicas/GitHub/NiceBuy/NiceBuy/app/src/main/res/mipmap-anydpi-v26/add_buton.xml" value="0.20625" />
         <entry key="..\:/practicas/curso3/Ingenieria software/practica5/Notepadv3/app/src/main/res/layout/activity_notepadv3.xml" value="0.15925925925925927" />
         <entry key="..\:/practicas/curso3/Ingenieria software/practica5/Notepadv3/app/src/main/res/layout/note_edit.xml" value="0.1" />
         <entry key="..\:/practicas/curso3/Ingenieria software/trabajo/NiceBuy/NiceBuy/app/src/main/res/layout/activity_notepadv3.xml" value="0.290625" />
+        <entry key="..\:/practicas/curso3/Ingenieria software/trabajo/NiceBuy/NiceBuy/app/src/main/res/layout/add_product.xml" value="0.21014492753623187" />
+        <entry key="..\:/practicas/curso3/Ingenieria software/trabajo/NiceBuy/NiceBuy/app/src/main/res/layout/add_product_row.xml" value="0.21014492753623187" />
+        <entry key="..\:/practicas/curso3/Ingenieria software/trabajo/NiceBuy/NiceBuy/app/src/main/res/layout/pedido_edit.xml" value="0.21014492753623187" />
         <entry key="..\:/practicas/curso3/Ingenieria software/trabajo/NiceBuy/NiceBuy/app/src/main/res/layout/product_edit.xml" value="0.290625" />
         <entry key="..\:/practicas/curso3/Ingenieria software/trabajo/NiceBuy/NiceBuy/app/src/main/res/layout/product_pad.xml" value="0.290625" />
         <entry key="app/src/main/res/layout/activity_notepadv3.xml" value="0.1" />

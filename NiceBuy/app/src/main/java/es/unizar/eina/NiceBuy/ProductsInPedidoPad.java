@@ -12,16 +12,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @SuppressWarnings("ALL")
 public class ProductsInPedidoPad extends AppCompatActivity {
 
-    private EditText nombrePedido;
+
 
     private static final int ADD_PRODUCT=0;
-    private static final int ACTIVITY_EDIT=1;
+    private static final int ACTIVITY_CHANGE_NUM=1;
 
     private static final int INSERT_ID = Menu.FIRST;
     private static final int DELETE_ID = Menu.FIRST + 1;
@@ -37,6 +49,10 @@ public class ProductsInPedidoPad extends AppCompatActivity {
     private ListView mList;
     private Long pedidoId;
 
+    private EditText nombre;
+    private EditText telefono;
+    private EditText fecha;
+
 
     /** Called when the activity is first created. */
     @Override
@@ -49,7 +65,11 @@ public class ProductsInPedidoPad extends AppCompatActivity {
         setContentView(R.layout.pedido_edit);
         setTitle("Edit pedido");
 
-        nombrePedido = (EditText) findViewById(R.id.title);
+        nombre = (EditText) findViewById(R.id.title);
+        telefono = (EditText) findViewById(R.id.telephone);
+        fecha = (EditText) findViewById(R.id.date);
+
+
         mList = (ListView)findViewById(R.id.list);
 
         Button confirmButton = (Button) findViewById(R.id.confirm);
@@ -65,6 +85,7 @@ public class ProductsInPedidoPad extends AppCompatActivity {
                     extras.getLong(ProductDbAdapter.KEY_ROWID_PEDIDOS) : null;
         }
         fillData();
+        populateFields();
         //SortedList<String> sortedList = new SortedList(mList);
         registerForContextMenu(mList);
 
@@ -72,7 +93,8 @@ public class ProductsInPedidoPad extends AppCompatActivity {
 
             public void onClick(View view) {
                 //setResult(RESULT_OK);
-                finish();
+                //finish();
+                saveState();
             }
 
         });
@@ -86,16 +108,35 @@ public class ProductsInPedidoPad extends AppCompatActivity {
             startManagingCursor(c); // deprecated method, but still works
             String[] from = new String[]{
                     ProductDbAdapter.KEY_TITLE,
-                    ProductDbAdapter.KEY_PESO,
-                    ProductDbAdapter.KEY_PRECIO
+                    ProductDbAdapter.PERT_CANTIDAD
             };
 
             // Revisar esto para meter mas text
-            int[] to = new int[]{R.id.text1, R.id.text2, R.id.text3};
+            int[] to = new int[]{R.id.text1, R.id.text2/*, R.id.text3*/};
             SimpleCursorAdapter notes =
-                    new SimpleCursorAdapter(this, R.layout.notes_row, c, from, to); // deprecated, but works
+                    new SimpleCursorAdapter(this, R.layout.product_in_pedido, c, from, to); // deprecated, but works
             mList.setAdapter(notes);
         }
+    }
+
+
+    private void populateFields() {
+
+        if(pedidoId != null) {
+            Cursor pedido = mDbHelper.fetchPedido(pedidoId);
+            if (pedido != null && pedido.getCount() > 0) {
+                //noinspection deprecation
+                startManagingCursor(pedido);
+
+                nombre.setText(pedido.getString(
+                        pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_TITLE)));
+                telefono.setText(pedido.getString(
+                        pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_TEL)));
+                fecha.setText(pedido.getString(
+                        pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_DATE)));
+            }
+        }
+
     }
 
 
@@ -133,7 +174,7 @@ public class ProductsInPedidoPad extends AppCompatActivity {
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.menu_delete);
-        menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.menu_edit);
+        //menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.change_quantity);
        // menu.add(Menu.NONE, EMAIL_ID, Menu.NONE, R.string.menu_email);
        // menu.add(Menu.NONE, SMS_ID, Menu.NONE, R.string.menu_sms);
     }
@@ -147,10 +188,10 @@ public class ProductsInPedidoPad extends AppCompatActivity {
                 mDbHelper.deleteProduct(info.id);
                 fillData();
                 return true;
-            case EDIT_ID:
+            /*case EDIT_ID:
                 info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 editProduct(info.position, info.id);
-                return true;
+                return true;*/
 
         }
         return super.onContextItemSelected(item);
@@ -164,17 +205,6 @@ public class ProductsInPedidoPad extends AppCompatActivity {
     }
 
 
-    protected void editProduct(int position, long id) {
-
-        Intent i = new Intent(this, ProductEdit.class);
-        i.putExtra(ProductDbAdapter.KEY_ROWID, id);
-
-        //noinspection deprecation
-        startActivityForResult(i, ACTIVITY_EDIT);
-    }
-
-
-
     /*@Override
     protected void onActivityResult(int requestCode , int resultCode , Intent intent) {
         super.onActivityResult(requestCode , resultCode , intent);
@@ -186,43 +216,58 @@ public class ProductsInPedidoPad extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        saveState();
+        //saveState();
         outState.putSerializable(ProductDbAdapter.KEY_ROWID_PEDIDOS, pedidoId);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        saveState();
+        //saveState();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (pedidoId != null) {
-            Cursor pedido = mDbHelper.fetchPedido(pedidoId);
-            //noinspection deprecation
-            startManagingCursor(pedido);
-
-            nombrePedido.setText(pedido.getString(
-                    pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_TITLE)));
-
-            fillData();
-        }
+        populateFields();
+        fillData();
     }
+
 
     private void saveState() {
-        String name = nombrePedido.getText().toString();
-        if (pedidoId == null) {
-            long id = mDbHelper.crearPedido(name);
-            if (id > 0) {
-                pedidoId = id;
+        String nameString = nombre.getText().toString();
+        String telefonoString = telefono.getText().toString();
+        String fechaString = fecha.getText().toString();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+
+        try {
+            Date date = dateFormat.parse(fechaString);
+            if(date != null) System.out.println(date.toString());
+            else System.out.println("date es null");
+            if (pedidoId == null) {
+                long id = mDbHelper.crearPedido(nameString, telefonoString, fechaString);
+                if (id > 0) {
+                    pedidoId = id;
+                }
+            } else {
+                mDbHelper.updatePedido(nameString, telefonoString, fechaString, pedidoId);
             }
-        } else {
-            mDbHelper.updatePedido(name, pedidoId);
+
+            finish();
+
+        } catch (ParseException e) {
+            //fecha mal escrita
+            e.printStackTrace();
+            Toast.makeText(this, "Fecha mal escrita", Toast.LENGTH_SHORT).show();
         }
+
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode , int resultCode , Intent intent) {
+        super.onActivityResult(requestCode , resultCode , intent);
+        fillData();
+        mList.setSelection(selectedProduct);
+    }
 
 }

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.Date;
 import java.util.ArrayList;
 
 /**
@@ -27,7 +28,9 @@ public class ProductDbAdapter {
     public static final String KEY_ROWID = "_id";
 
     public static final String KEY_ROWID_PEDIDOS = "_id";
-    public static final String PE_KEY_TITLE = "nombrePedido";
+    public static final String PE_KEY_TITLE = "nombre";
+    public static final String PE_KEY_TEL = "telefono";
+    public static final String PE_KEY_DATE = "fechaLimite";
     public static final String PE_KEY_PRICE = "precioPedido";
     public static final String PE_KEY_WEIGHT = "pesoPedido";
 
@@ -198,11 +201,7 @@ public class ProductDbAdapter {
     public Cursor fetchPedido(long rowId) throws SQLException{
 
         Cursor mCursor =
-
-                mDb.query(true, DATABASE_TABLE_PEDIDOS, new String[]{KEY_ROWID_PEDIDOS,
-                                PE_KEY_TITLE,
-                                PE_KEY_PRICE,
-                                PE_KEY_WEIGHT},
+                mDb.query(true, DATABASE_TABLE_PEDIDOS, null,
                         KEY_ROWID_PEDIDOS + "=" + rowId, null,
                         null, null, null, null);
         if (mCursor != null) {
@@ -267,12 +266,8 @@ public class ProductDbAdapter {
                 break;
         }
         System.out.println("al final");
-        return mDb.query(DATABASE_TABLE_PEDIDOS, new String[] {
-                KEY_ROWID_PEDIDOS,
-                PE_KEY_TITLE,
-                PE_KEY_WEIGHT,
-                PE_KEY_PRICE,
-        }, null, null, null, null, parametroAux);
+        return mDb.query(DATABASE_TABLE_PEDIDOS, null
+                , null, null, null, null, parametroAux);
     }
 
     private int producCounter(int p[]){
@@ -309,7 +304,7 @@ public class ProductDbAdapter {
     public boolean checkProduct(String title, String descripcion, String peso, String precio){
         boolean correcto = true;
         if (title == null || title.length() <= 0 ||
-                descripcion == null || descripcion.length() <= 0 ||
+                //descripcion == null || descripcion.length() <= 0 ||
                 Double.parseDouble(peso) < 0.0 ||
                 Double.parseDouble(peso) < 0.0) correcto = false;
         return correcto;
@@ -364,7 +359,7 @@ public class ProductDbAdapter {
 
     }
 
-    public long crearPedido(String nombre){
+    public long crearPedido(String nombre, String telefono, String fechaLimite){
 
         if (nombre == null || nombre == ""){
             System.out.println("Error en los datos del producto");
@@ -374,6 +369,8 @@ public class ProductDbAdapter {
             if (totalOrders() < 100) {
                 ContentValues initialValues = new ContentValues();
                 initialValues.put(PE_KEY_TITLE, nombre);
+                initialValues.put(PE_KEY_TEL, telefono);
+                initialValues.put(PE_KEY_DATE, fechaLimite);
                 initialValues.put(PE_KEY_PRICE, 0.0);
                 initialValues.put(PE_KEY_WEIGHT, 0.0);
                 return mDb.insert(DATABASE_TABLE_PEDIDOS, null, initialValues);
@@ -398,13 +395,15 @@ public class ProductDbAdapter {
     }
 
 
-    public boolean updatePedido(String nombre, long pedidoId){
+    public boolean updatePedido(String nombre, String telefono, String fechaLimite, long pedidoId){
         if (nombre == null || nombre == ""){
             return false;
         }
         else{
             ContentValues args = new ContentValues();
             args.put(PE_KEY_TITLE, nombre);
+            args.put(PE_KEY_TEL, telefono);
+            args.put(PE_KEY_DATE, fechaLimite);
             args.put(PE_KEY_PRICE, 0.0);
             args.put(PE_KEY_WEIGHT, 0.0);
 
@@ -413,13 +412,32 @@ public class ProductDbAdapter {
     }
 
 
-    public long anyadirProductoAPedido(Long idProducto, Long idPedido, int cantidad) {
-            System.out.println("param long "+idProducto);
+    public long anyadirProductoAPedido(Long idProducto, Long idPedido, Integer cantidad) {
+        if (cantidad == null || idProducto == null || idPedido == null || cantidad < 0){
+            return -1;
+        }else {
+            System.out.println("param long " + idProducto);
             ContentValues initialValues = new ContentValues();
             initialValues.put(PERT_PRODUCTO, idProducto);
             initialValues.put(PERT_PEDIDO, idPedido);
             initialValues.put(PERT_CANTIDAD, cantidad);
             return mDb.insert(DATABASE_TABLE_PERTENENCIA, null, initialValues);
+        }
+    }
+
+    public boolean updateProductoEnPedido(Long idProducto, Long idPedido, Integer cantidad) {
+        if (cantidad == null || idProducto == null || idPedido == null || cantidad < 0){
+            return false;
+        }else{
+            ContentValues args = new ContentValues();
+            args.put(PERT_CANTIDAD, cantidad);
+            boolean b  = mDb.update(DATABASE_TABLE_PERTENENCIA, args, PERT_PRODUCTO + "=? AND " + PERT_PEDIDO + "=?",
+                    new String[]{String.valueOf(idProducto), String.valueOf(idPedido)}) > 0;
+            System.out.print("update ");
+            System.out.println(b);
+            return b;
+
+        }
     }
 
 
@@ -456,11 +474,28 @@ public class ProductDbAdapter {
     }
 
 
+    public Cursor fetchProductEnPedido(Long idProducto, Long idPedido) {
+        System.out.println("pedidoId "+String.valueOf(idPedido));
+        System.out.println("productId "+String.valueOf(idProducto));
+        Cursor mCursor = mDb.query(true, DATABASE_TABLE_PERTENENCIA, new String[]{PERT_CANTIDAD},
+                        PERT_PRODUCTO + "=? AND " + PERT_PEDIDO + "=?", new String[]{String.valueOf(idProducto),
+                                String.valueOf(idPedido)},
+                        null, null, null, null);
 
+        if (mCursor != null) {
+            mCursor.moveToFirst();
 
-
-
-
-
+        }
+        return mCursor;
+    }
 
 }
+
+
+
+
+
+
+
+
+
