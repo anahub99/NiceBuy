@@ -1,6 +1,7 @@
 package es.unizar.eina.send;
 
 import android.app.Activity;
+import android.content.Context;
 
 /** Implementa la interfaz de la abstraccion utilizando (delegando a) una referencia a un objeto de tipo implementor  */
 public class SendAbstractionImpl implements SendAbstraction {
@@ -13,7 +14,9 @@ public class SendAbstractionImpl implements SendAbstraction {
 	 * @param method parametro potencialmente utilizable para instanciar el objeto delegado
 	 */
 	public SendAbstractionImpl(Activity sourceActivity, String method) {
-		if(method.equalsIgnoreCase("SMS"))
+		if(method.equalsIgnoreCase("WhatsApp"))
+			implementor = new WhatsAppImplementor(sourceActivity, (Context) sourceActivity);
+		else if(method.equalsIgnoreCase("SMS"))
 			implementor = new SMSImplementor(sourceActivity);
 		else
        	    implementor = new MailImplementor(sourceActivity);

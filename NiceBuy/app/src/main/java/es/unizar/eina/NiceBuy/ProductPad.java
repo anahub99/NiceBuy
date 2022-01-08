@@ -88,14 +88,14 @@ public class ProductPad extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.menu_insert);
-        menu.add(Menu.NONE, O_N_A, Menu.NONE, "Order by Name Asc.");
-        menu.add(Menu.NONE, O_N_A_D, Menu.NONE, "Order by Name Desc.");
-        menu.add(Menu.NONE, O_P_A, Menu.NONE, "Order by Price Asc.");
-        menu.add(Menu.NONE, O_P_A_D, Menu.NONE, "Order by Price Desc.");
-        menu.add(Menu.NONE, O_W_A, Menu.NONE, "Order by Weight Asc.");
-        menu.add(Menu.NONE, O_W_A_D, Menu.NONE, "Order by Weight Desc.");
-        menu.add(Menu.NONE, VER_PEDIDOS, Menu.NONE, "Ver los pedidos");
+        menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.product_insert);
+        menu.add(Menu.NONE, O_N_A, Menu.NONE, R.string.order_name_asc);
+        menu.add(Menu.NONE, O_N_A_D, Menu.NONE, R.string.order_name_desc);
+        menu.add(Menu.NONE, O_P_A, Menu.NONE, R.string.order_price_asc);
+        menu.add(Menu.NONE, O_P_A_D, Menu.NONE, R.string.order_price_desc);
+        menu.add(Menu.NONE, O_W_A, Menu.NONE, R.string.order_weight_asc);
+        menu.add(Menu.NONE, O_W_A_D, Menu.NONE, R.string.order_weight_desc);
+        menu.add(Menu.NONE, VER_PEDIDOS, Menu.NONE, R.string.ver_pedidos);
 
 
         return result;

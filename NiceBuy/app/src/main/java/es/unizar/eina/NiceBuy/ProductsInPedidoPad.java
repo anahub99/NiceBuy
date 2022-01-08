@@ -108,11 +108,13 @@ public class ProductsInPedidoPad extends AppCompatActivity {
             startManagingCursor(c); // deprecated method, but still works
             String[] from = new String[]{
                     ProductDbAdapter.KEY_TITLE,
-                    ProductDbAdapter.PERT_CANTIDAD
+                    ProductDbAdapter.PERT_CANTIDAD,
+                    ProductDbAdapter.KEY_PESO,
+                    ProductDbAdapter.KEY_PRECIO
             };
 
             // Revisar esto para meter mas text
-            int[] to = new int[]{R.id.text1, R.id.text2/*, R.id.text3*/};
+            int[] to = new int[]{ R.id.text1, R.id.text2, R.id.text3, R.id.text4 };
             SimpleCursorAdapter notes =
                     new SimpleCursorAdapter(this, R.layout.product_in_pedido, c, from, to); // deprecated, but works
             mList.setAdapter(notes);
@@ -145,7 +147,7 @@ public class ProductsInPedidoPad extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.add_product_pedido);
+        if(pedidoId != null) menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.add_product_pedido);
         menu.add(Menu.NONE, VER_PEDIDOS, Menu.NONE, "Ver los pedidos");
 
 
@@ -185,7 +187,7 @@ public class ProductsInPedidoPad extends AppCompatActivity {
         switch(item.getItemId()) {
             case DELETE_ID:
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                mDbHelper.deleteProduct(info.id);
+                mDbHelper.deleteProductFromPedido(info.id, pedidoId);
                 fillData();
                 return true;
             /*case EDIT_ID:

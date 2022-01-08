@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
+import es.unizar.eina.send.SendAbstractionImpl;
+
 
 @SuppressWarnings("ALL")
 public class PedidoPad extends AppCompatActivity{
@@ -39,6 +41,8 @@ public class PedidoPad extends AppCompatActivity{
     private static final int PE_O_P_A_D = Menu.FIRST + 8;
     // Ver los productos
     private static final int VER_PRODUCTOS = Menu.FIRST + 9;
+    // Enviar WhatsApp
+    private static final int SEND_WHATSAPP = Menu.FIRST + 10;
 
     int selectedProduct;
     ProductDbAdapter.OrdenarPor order;
@@ -86,14 +90,14 @@ public class PedidoPad extends AppCompatActivity{
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
             boolean result = super.onCreateOptionsMenu(menu);
-            menu.add(Menu.NONE, INSERT_ID, Menu.NONE, "Add order");
-            menu.add(Menu.NONE, PE_O_N_A, Menu.NONE, "Order by Name Asc.");
-            menu.add(Menu.NONE, PE_O_N_A_D, Menu.NONE, "Order by Name Desc.");
-            menu.add(Menu.NONE, PE_O_P_A, Menu.NONE, "Order by Price Asc.");
-            menu.add(Menu.NONE, PE_O_P_A_D, Menu.NONE, "Order by Price Desc.");
-            menu.add(Menu.NONE, PE_O_W_A, Menu.NONE, "Order by Weight Asc.");
-            menu.add(Menu.NONE, PE_O_W_A_D, Menu.NONE, "Order by Weight Desc.");
-            menu.add(Menu.NONE, VER_PRODUCTOS, Menu.NONE, "Ver los productos");
+            menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.order_insert);
+            menu.add(Menu.NONE, PE_O_N_A, Menu.NONE, R.string.order_name_asc);
+            menu.add(Menu.NONE, PE_O_N_A_D, Menu.NONE, R.string.order_name_desc);
+            menu.add(Menu.NONE, PE_O_P_A, Menu.NONE, R.string.order_price_asc);
+            menu.add(Menu.NONE, PE_O_P_A_D, Menu.NONE, R.string.order_price_desc);
+            menu.add(Menu.NONE, PE_O_W_A, Menu.NONE, R.string.order_weight_asc);
+            menu.add(Menu.NONE, PE_O_W_A_D, Menu.NONE, R.string.order_weight_desc);
+            menu.add(Menu.NONE, VER_PRODUCTOS, Menu.NONE, R.string.ver_productos);
 
 
             return result;
@@ -151,6 +155,7 @@ public class PedidoPad extends AppCompatActivity{
             super.onCreateContextMenu(menu, v, menuInfo);
             menu.add(Menu.NONE, DELETE_ID, Menu.NONE, "Eliminar Pedido");
             menu.add(Menu.NONE, EDIT_ID, Menu.NONE, "Editar pedido");
+            menu.add(Menu.NONE, SEND_WHATSAPP, Menu.NONE, R.string.menu_whatsapp);
             // menu.add(Menu.NONE, EMAIL_ID, Menu.NONE, R.string.menu_email);
             // menu.add(Menu.NONE, SMS_ID, Menu.NONE, R.string.menu_sms);
         }
@@ -167,6 +172,44 @@ public class PedidoPad extends AppCompatActivity{
                 case EDIT_ID:
                     info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                     editPedido(info.position, info.id);
+                    return true;
+                case SEND_WHATSAPP:
+                    info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+                    Cursor pedido = mDbHelper.fetchPedido(info.id);
+                    //noinspection deprecation
+                    startManagingCursor(pedido);
+                    String nombrePedido = (pedido.getString(
+                            pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_TITLE)));
+
+                    Cursor productosDePedido = mDbHelper.fetchProductosDePedido(info.id, order, asc);
+                    startManagingCursor(productosDePedido);
+                    productosDePedido.moveToFirst();
+                    String productos = "Lista de productos:\n\n";
+                    do{
+                        String nombreProducto = productosDePedido.getString(
+                                productosDePedido.getColumnIndexOrThrow(ProductDbAdapter.KEY_TITLE));
+                        String descripcionProducto = productosDePedido.getString(
+                                productosDePedido.getColumnIndexOrThrow(ProductDbAdapter.KEY_DESCRIPCION));
+                        String cantidadProducto = productosDePedido.getString(
+                                productosDePedido.getColumnIndexOrThrow(ProductDbAdapter.PERT_CANTIDAD));
+                        String pesoProducto = productosDePedido.getString(
+                                productosDePedido.getColumnIndexOrThrow(ProductDbAdapter.KEY_PESO));
+                        String precioProducto = productosDePedido.getString(
+                                productosDePedido.getColumnIndexOrThrow(ProductDbAdapter.KEY_PRECIO));
+
+                        productos = productos + nombreProducto + "\n" +
+                                "Descripción:" + "\n" + descripcionProducto + "\n" +
+                                "Unidades: " + cantidadProducto + "\nPeso/ud.: " + pesoProducto + "kg " +
+                                "Precio/ud.: " + precioProducto + "\n\n";
+                    }while(productosDePedido.moveToNext());
+
+
+
+
+                    SendAbstractionImpl a = new SendAbstractionImpl(this, "WhatsApp");
+
+                    //a.send("",nombre);
                     return true;
 
             }
@@ -187,7 +230,6 @@ public class PedidoPad extends AppCompatActivity{
             //noinspection deprecation
             startActivityForResult(i, PEDIDO_EDIT);
         }
-
 
 
         @Override

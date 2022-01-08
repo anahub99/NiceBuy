@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.util.Date;
 import java.util.ArrayList;
 
 /**
@@ -313,10 +312,13 @@ public class ProductDbAdapter {
 
 
 
-    // Devuelve TRUE si y solo si los parametros de una lista son correctos
-    public boolean checkOrder(){
-        // Quizas se implementa despues
-        return  false;
+    // Devuelve TRUE si y solo si los parametros de un pedido son correctos
+    public boolean checkPedido(String nombre, String telefono, String fechaLimite){
+        boolean correcto = true;
+        if (nombre == null || nombre.length() <= 0 ||
+                telefono == null || telefono.length() <= 0 ||
+                fechaLimite == null || fechaLimite.length() <= 0) correcto = false;
+        return correcto;
     }
 
     public long createOrder(String tituloPedido, ArrayList<String> productos, int cuantos[]) {
@@ -361,8 +363,8 @@ public class ProductDbAdapter {
 
     public long crearPedido(String nombre, String telefono, String fechaLimite){
 
-        if (nombre == null || nombre == ""){
-            System.out.println("Error en los datos del producto");
+        if (!checkPedido(nombre, telefono, fechaLimite)){
+            System.out.println("Error en los datos del pedido");
             return -1;
         }
         else {
@@ -396,7 +398,7 @@ public class ProductDbAdapter {
 
 
     public boolean updatePedido(String nombre, String telefono, String fechaLimite, long pedidoId){
-        if (nombre == null || nombre == ""){
+        if (!checkPedido(nombre, telefono, fechaLimite)){
             return false;
         }
         else{
@@ -404,9 +406,25 @@ public class ProductDbAdapter {
             args.put(PE_KEY_TITLE, nombre);
             args.put(PE_KEY_TEL, telefono);
             args.put(PE_KEY_DATE, fechaLimite);
-            args.put(PE_KEY_PRICE, 0.0);
-            args.put(PE_KEY_WEIGHT, 0.0);
 
+            return mDb.update(DATABASE_TABLE_PEDIDOS, args, KEY_ROWID + "=" + pedidoId, null) > 0;
+        }
+    }
+
+
+    private boolean checkPesoPrecio(Long precio, Long peso){
+        if(precio == null || precio < 0 || peso == null || peso < 0) return false;
+        else return true;
+    }
+
+    public boolean pedidoUpdatePrecioPeso(Long precio, Long peso, long pedidoId){
+        if (!checkPesoPrecio(precio, peso)){
+            return false;
+        }
+        else{
+            ContentValues args = new ContentValues();
+            args.put(PE_KEY_PRICE, precio);
+            args.put(PE_KEY_WEIGHT, peso);
             return mDb.update(DATABASE_TABLE_PEDIDOS, args, KEY_ROWID + "=" + pedidoId, null) > 0;
         }
     }
@@ -440,6 +458,10 @@ public class ProductDbAdapter {
         }
     }
 
+    public boolean deleteProductFromPedido(Long idProducto, Long idPedido){
+        return (mDb.delete(DATABASE_TABLE_PERTENENCIA, PERT_PRODUCTO + "=? AND " + PERT_PEDIDO + "=?",
+                new String[]{String.valueOf(idProducto), String.valueOf(idPedido)}) > 0);
+    }
 
     public Cursor fetchProductosDePedido(Long idPedido, OrdenarPor parametro, boolean asc) {
 
@@ -488,6 +510,39 @@ public class ProductDbAdapter {
         }
         return mCursor;
     }
+
+
+    public Long precioTotalPedido(Long idPedido){
+
+        //Cursor mCursor = mDb.rawQuery("select sum(totalprice) as total from " + TABLE_Users + ";", null);
+
+        String query = "select sum(cantidad * precio) as total from productos, pertenece "
+                + "where _idPedidos = ? AND _idProducto = productos._id";
+
+        Cursor mCursor = mDb.rawQuery(query, new String[]{String.valueOf(idPedido)});
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+            return mCursor.getLong(0);
+        }
+        return null;
+    }
+
+    public Long pesoTotalPedido(Long idPedido){
+
+        //Cursor mCursor = mDb.rawQuery("select sum(totalprice) as total from " + TABLE_Users + ";", null);
+
+        String query = "select sum(cantidad * peso) as total from productos, pertenece "
+                + "where _idPedidos = ? AND _idProducto = productos._id";
+
+        Cursor mCursor = mDb.rawQuery(query, new String[]{String.valueOf(idPedido)});
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+            return mCursor.getLong(0);
+        }
+        return null;
+    }
+
+
 
 }
 
