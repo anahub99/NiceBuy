@@ -153,8 +153,8 @@ public class PedidoPad extends AppCompatActivity{
         public void onCreateContextMenu(ContextMenu menu, View v,
                 ContextMenu.ContextMenuInfo menuInfo) {
             super.onCreateContextMenu(menu, v, menuInfo);
-            menu.add(Menu.NONE, DELETE_ID, Menu.NONE, "Eliminar Pedido");
-            menu.add(Menu.NONE, EDIT_ID, Menu.NONE, "Editar pedido");
+            menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.order_delete);
+            menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.order_edit);
             menu.add(Menu.NONE, SEND_WHATSAPP, Menu.NONE, R.string.menu_whatsapp);
             // menu.add(Menu.NONE, EMAIL_ID, Menu.NONE, R.string.menu_email);
             // menu.add(Menu.NONE, SMS_ID, Menu.NONE, R.string.menu_sms);
@@ -181,6 +181,12 @@ public class PedidoPad extends AppCompatActivity{
                     startManagingCursor(pedido);
                     String nombrePedido = (pedido.getString(
                             pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_TITLE)));
+                    String telefono = (pedido.getString(
+                            pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_TEL)));
+                    Double pesoPedido = (pedido.getDouble(
+                            pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_WEIGHT)));
+                    Double precioPedido = (pedido.getDouble(
+                            pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_PRICE)));
 
                     Cursor productosDePedido = mDbHelper.fetchProductosDePedido(info.id, order, asc);
                     startManagingCursor(productosDePedido);
@@ -200,16 +206,19 @@ public class PedidoPad extends AppCompatActivity{
 
                         productos = productos + nombreProducto + "\n" +
                                 "Descripción:" + "\n" + descripcionProducto + "\n" +
-                                "Unidades: " + cantidadProducto + "\nPeso/ud.: " + pesoProducto + "kg " +
-                                "Precio/ud.: " + precioProducto + "\n\n";
+                                "Unidades: " + cantidadProducto + "\nPeso/ud.: " + pesoProducto + " kg " +
+                                "Precio/ud.: " + precioProducto + " €\n\n";
                     }while(productosDePedido.moveToNext());
 
+                    String total = "Peso total: "+pesoPedido.toString()+" kg  Precio total: "+precioPedido.toString()+" €";
 
-
+                    String mensaje = "¡Hola "+ nombrePedido+ "!\nSu pedido ya está listo. Estas son sus características:\n\n"
+                            + productos + total;
 
                     SendAbstractionImpl a = new SendAbstractionImpl(this, "WhatsApp");
 
-                    //a.send("",nombre);
+                    System.out.println(mensaje);
+                    a.send(telefono,mensaje);
                     return true;
 
             }

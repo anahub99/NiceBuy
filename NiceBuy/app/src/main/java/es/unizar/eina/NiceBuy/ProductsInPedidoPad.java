@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -52,7 +53,8 @@ public class ProductsInPedidoPad extends AppCompatActivity {
     private EditText nombre;
     private EditText telefono;
     private EditText fecha;
-
+    private TextView pesoPedido;
+    private TextView precioPedido;
 
     /** Called when the activity is first created. */
     @Override
@@ -68,6 +70,8 @@ public class ProductsInPedidoPad extends AppCompatActivity {
         nombre = (EditText) findViewById(R.id.title);
         telefono = (EditText) findViewById(R.id.telephone);
         fecha = (EditText) findViewById(R.id.date);
+        pesoPedido = (TextView) findViewById(R.id.weight);
+        precioPedido = (TextView) findViewById(R.id.price);
 
 
         mList = (ListView)findViewById(R.id.list);
@@ -136,6 +140,10 @@ public class ProductsInPedidoPad extends AppCompatActivity {
                         pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_TEL)));
                 fecha.setText(pedido.getString(
                         pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_DATE)));
+                pesoPedido.setText(pedido.getString(
+                        pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_WEIGHT)));
+                precioPedido.setText(pedido.getString(
+                        pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_PRICE)));
             }
         }
 

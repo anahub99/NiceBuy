@@ -18,6 +18,8 @@
     <string name="order_insert">Añadir pedido</string>
     <string name="menu_delete">Eliminar producto</string>
     <string name="menu_edit">Editar producto</string>
+    <string name="order_delete">Eliminar pedido</string>
+    <string name="order_edit">Editar pedido</string>
     <string name="descripcion">Descripcion</string>
     <string name="peso">Peso</string>
     <string name="precio">Precio</string>
@@ -33,6 +35,8 @@
     <string name="pedidos">Pedidos</string>
     <string name="ver_productos">Ver los productos</string>
     <string name="ver_pedidos">Ver los pedidos</string>
+    <string name="peso_total">Peso total:</string>
+    <string name="precio_total">Precio total:</string>
 
     <string name="order_name_asc">Ordenar por nombre (asc.)</string>
     <string name="order_name_desc">Ordenar por nombre (desc.)</string>
@@ -40,6 +44,7 @@
     <string name="order_price_desc">Ordenar por precio (desc.)</string>
     <string name="order_weight_asc">Ordenar por peso (asc.)</string>
     <string name="order_weight_desc">Ordenar por peso (desc.)</string>
+
 
 
 </resources>

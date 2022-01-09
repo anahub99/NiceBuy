@@ -100,8 +100,8 @@ public class ProductEdit extends AppCompatActivity{
     private void saveState() {
         String title = titulo.getText().toString();
         String body = descripcion.getText().toString();
-        String w = peso.getText().toString();
-        String p = precio.getText().toString();
+        Double w = Double.valueOf(peso.getText().toString());
+        Double p = Double.valueOf(precio.getText().toString());
         if (mRowId == null) {
             long id = mDbHelper.createProduct(title, body, w, p);
             if (id > 0) {

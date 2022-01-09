@@ -152,8 +152,8 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
         if(!mDbHelper.updateProductoEnPedido(productoId,pedidoId,cantidad)){
             mDbHelper.anyadirProductoAPedido(productoId,pedidoId,cantidad);
         }
-        Long nuevoPrecio = mDbHelper.precioTotalPedido(pedidoId);
-        Long nuevoPeso = mDbHelper.pesoTotalPedido(pedidoId);
+        Double nuevoPrecio = mDbHelper.precioTotalPedido(pedidoId);
+        Double nuevoPeso = mDbHelper.pesoTotalPedido(pedidoId);
         System.out.println("peso pedido"+nuevoPeso.toString());
         mDbHelper.pedidoUpdatePrecioPeso(nuevoPrecio,nuevoPeso,pedidoId);
     }

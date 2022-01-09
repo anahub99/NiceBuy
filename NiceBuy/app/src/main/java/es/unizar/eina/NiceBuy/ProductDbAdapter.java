@@ -95,7 +95,7 @@ public class ProductDbAdapter {
      * @param descripcion the body of the note
      * @return rowId or -1 if failed
      */
-    public long createProduct(String title, String descripcion, String peso, String precio) {
+    public long createProduct(String title, String descripcion, Double peso, Double precio) {
         if (!checkProduct(title, descripcion, peso, precio)){
             System.out.println("Error en los datos del producto");
             return -1;
@@ -220,8 +220,8 @@ public class ProductDbAdapter {
      * @param descripcion value to set note body to
      * @return true if the note was successfully updated, false otherwise
      */
-    public boolean updateProduct(long rowId, String title, String descripcion, String peso, String precio) {
-       if(checkProduct(title, descripcion, peso, precio)){
+    public boolean updateProduct(long rowId, String title, String descripcion, Double peso, Double precio) {
+       if(!checkProduct(title, descripcion, peso, precio)){
            return false;
        }
        else{
@@ -300,12 +300,12 @@ public class ProductDbAdapter {
     }
 
     // Devuelve TRUE si y solo si los parametros de un producto son correctos y no vacios
-    public boolean checkProduct(String title, String descripcion, String peso, String precio){
+    public boolean checkProduct(String title, String descripcion, Double peso, Double precio){
         boolean correcto = true;
         if (title == null || title.length() <= 0 ||
-                //descripcion == null || descripcion.length() <= 0 ||
-                Double.parseDouble(peso) < 0.0 ||
-                Double.parseDouble(peso) < 0.0) correcto = false;
+                descripcion == null || descripcion.length() <= 0 ||
+                peso < 0.0 ||
+                precio < 0.0) correcto = false;
         return correcto;
 
     }
@@ -412,12 +412,12 @@ public class ProductDbAdapter {
     }
 
 
-    private boolean checkPesoPrecio(Long precio, Long peso){
+    private boolean checkPesoPrecio(Double precio, Double peso){
         if(precio == null || precio < 0 || peso == null || peso < 0) return false;
         else return true;
     }
 
-    public boolean pedidoUpdatePrecioPeso(Long precio, Long peso, long pedidoId){
+    public boolean pedidoUpdatePrecioPeso(Double precio, Double peso, long pedidoId){
         if (!checkPesoPrecio(precio, peso)){
             return false;
         }
@@ -512,7 +512,7 @@ public class ProductDbAdapter {
     }
 
 
-    public Long precioTotalPedido(Long idPedido){
+    public Double precioTotalPedido(Long idPedido){
 
         //Cursor mCursor = mDb.rawQuery("select sum(totalprice) as total from " + TABLE_Users + ";", null);
 
@@ -522,12 +522,12 @@ public class ProductDbAdapter {
         Cursor mCursor = mDb.rawQuery(query, new String[]{String.valueOf(idPedido)});
         if (mCursor != null) {
             mCursor.moveToFirst();
-            return mCursor.getLong(0);
+            return mCursor.getDouble(0);
         }
         return null;
     }
 
-    public Long pesoTotalPedido(Long idPedido){
+    public Double pesoTotalPedido(Long idPedido){
 
         //Cursor mCursor = mDb.rawQuery("select sum(totalprice) as total from " + TABLE_Users + ";", null);
 
@@ -537,7 +537,7 @@ public class ProductDbAdapter {
         Cursor mCursor = mDb.rawQuery(query, new String[]{String.valueOf(idPedido)});
         if (mCursor != null) {
             mCursor.moveToFirst();
-            return mCursor.getLong(0);
+            return mCursor.getDouble(0);
         }
         return null;
     }
