@@ -542,6 +542,20 @@ public class ProductDbAdapter {
         return null;
     }
 
+    // Funcion que crea numberProduct-1 productos
+    // Devuelve TRUE si han sido todos creados correctamente, FALSE en caso contrario
+    boolean manyProductTest(int numberProdcts){
+        boolean resultadoFinal = true;
+        long resultadoCreate = -1;
+
+        int i = 1;
+        while(i < numberProdcts){
+            resultadoCreate = createProduct("Producto" + i, "Descripcion numero" + i, "10", "20");
+            if(resultadoCreate == -1) resultadoFinal = false; break;
+        }
+        return resultadoFinal;
+    }
+
 
 
 }
