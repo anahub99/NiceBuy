@@ -5,7 +5,7 @@ package es.unizar.eina.NiceBuy;
 * */
 
 import android.util.Log;
-
+/*
 public class Test {
     static public void createProductTest(ProductDbAdapter p){
         try{
@@ -85,3 +85,4 @@ public class Test {
         }
     }
 }
+*/

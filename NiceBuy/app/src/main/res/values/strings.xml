@@ -25,7 +25,8 @@
     <string name="precio">Precio</string>
     <string name="no_products">Sin productos</string>
     <string name="no_pedidos">Sin pedidos</string>
-    <string name="add_product_pedido">Añadir producto al pedido</string>
+    <string name="add_product_pedido">Añadir productos al pedido</string>
+    <string name="quantity_product_pedido">Elegir cantidad de producto</string>
     <string name="cantidad">Cantidad</string>
     <string name="change_quantity">Cambiar cantidad</string>
     <string name="telephone">Número de teléfono</string>

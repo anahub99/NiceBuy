@@ -31,7 +31,7 @@ public class ProductEdit extends AppCompatActivity{
         mDbHelper.open();
 
         setContentView(R.layout.product_edit);
-        setTitle(R.string.edit_note);
+        setTitle(R.string.menu_edit);
 
 
 

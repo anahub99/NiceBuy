@@ -65,7 +65,7 @@ public class ProductsInPedidoPad extends AppCompatActivity {
         mDbHelper.open();
 
         setContentView(R.layout.pedido_edit);
-        setTitle("Edit pedido");
+        setTitle(R.string.order_edit);
 
         nombre = (EditText) findViewById(R.id.title);
         telefono = (EditText) findViewById(R.id.telephone);

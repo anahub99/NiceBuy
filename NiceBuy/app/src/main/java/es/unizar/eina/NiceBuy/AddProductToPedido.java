@@ -38,6 +38,7 @@ public class AddProductToPedido extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_product);
+        setTitle(R.string.add_product_pedido);
 
         mDbHelper = new ProductDbAdapter(this);
         mDbHelper.open();

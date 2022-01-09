@@ -48,6 +48,7 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
         mDbHelper.open();
 
         setContentView(R.layout.elegir_cantidad);
+        setTitle(R.string.quantity_product_pedido);
 
         numProductos = (EditText) findViewById(R.id.cantidad);
 
