@@ -39,6 +39,8 @@ public class ProductPad extends AppCompatActivity {
     private static final int O_P_A_D = Menu.FIRST + 8;
     // Ver los pedidos
     private static final int VER_PEDIDOS = Menu.FIRST + 9;
+    // Menu pruebas
+    private static final int TESTS = Menu.FIRST + 10;
 
     int selectedProduct;
     ProductDbAdapter.OrdenarPor order;
@@ -96,6 +98,7 @@ public class ProductPad extends AppCompatActivity {
         menu.add(Menu.NONE, O_W_A, Menu.NONE, R.string.order_weight_asc);
         menu.add(Menu.NONE, O_W_A_D, Menu.NONE, R.string.order_weight_desc);
         menu.add(Menu.NONE, VER_PEDIDOS, Menu.NONE, R.string.ver_pedidos);
+        menu.add(Menu.NONE, TESTS, Menu.NONE, "Go Tests");
 
 
         return result;
@@ -138,8 +141,13 @@ public class ProductPad extends AppCompatActivity {
                 fillData(order,false);
                 return true;
             case VER_PEDIDOS:
-                System.out.println("aquihara");
+
                 startActivity(new Intent(ProductPad.this, PedidoPad.class));
+                finish();
+                return true;
+
+            case TESTS:
+                startActivity(new Intent(ProductPad.this, Pruebas.class));
                 finish();
                 return true;
 

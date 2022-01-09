@@ -1,42 +1,42 @@
 package es.unizar.eina.NiceBuy;
 
 /* Esta clase no tiene funcionalidad alguna dentro del sistema NiceBuy,
-* Su uso está limitiado unica y exclusivamente al desarollo de la apllicación.
-* */
+ * Su uso está limitiado unica y exclusivamente al desarollo de la apllicación.
+ * */
 
 import android.util.Log;
-/*
+
 public class Test {
     static public void createProductTest(ProductDbAdapter p){
         try{
             Log.d("PRUEBAS DE EQUIVALENCIA","createProduct()");
             long resultado;
             // Caso 1
-            resultado = p.createProduct("pr1", "primero", "10", "20");
+            resultado = p.createProduct("pr1", "primero", 10.0, 20.0);
             Log.d("Resultado - 1: ", String.valueOf(resultado));
 
             // Caso 2
-            resultado = p.createProduct("", "primero", "10", "20");
+            resultado = p.createProduct("", "primero", 10.0, 20.0);
             Log.d("Resultado - 2: ", String.valueOf(resultado));
 
             // Caso 3
-            resultado = p.createProduct(null, "primero", "10", "20");
+            resultado = p.createProduct(null, "primero", 10.0, 20.0);
             Log.d("Resultado - 3: ", String.valueOf(resultado));
 
             // Caso 4
-            resultado = p.createProduct("pr1", "primero", "10", "20");
+            resultado = p.createProduct("pr1", "primero", 10.0, 20.0);
             Log.d("Resultado - 4: ", String.valueOf(resultado));
 
             // Caso 5
-            resultado = p.createProduct("pr2", "segundo", "10", "0");
+            resultado = p.createProduct("pr2", "segundo", 10.0, 0.0);
             Log.d("Resultado - 5: ", String.valueOf(resultado));
 
             // Caso 6
-            resultado = p.createProduct("pr2", "segundo", "0", "20");
+            resultado = p.createProduct("pr2", "segundo", 0.0, 20.0);
             Log.d("Resultado - 6: ", String.valueOf(resultado));
 
             // Caso 7
-            resultado = p.createProduct("pr2", null, "10", "20");
+            resultado = p.createProduct("pr2", null, 10.0, 20.0);
             Log.d("Resultado - 7: ", String.valueOf(resultado));
 
 
@@ -50,35 +50,35 @@ public class Test {
             Log.d("PRUEBAS DE EQUIVALENCIA","updateProduct()");
             boolean resultado;
             // Caso 1 - correcto
-            resultado = p.updateProduct(2, "newNam", "newp2", "100", "200");
+            resultado = p.updateProduct(2, "newNam", "newp2", 100.0, 200.0);
             Log.d("Resultado - 1: ", String.valueOf(resultado));
 
             // Caso 2 - fallo null
-            resultado = p.updateProduct(2, null, "newp2", "100", "200");
+            resultado = p.updateProduct(2, null, "newp2", 100.0, 200.0);
             Log.d("Resultado - 2: ", String.valueOf(resultado));
 
             // Caso 3 - fallo vacio
-            resultado = p.updateProduct(2, "", "newp2", "100", "200");
+            resultado = p.updateProduct(2, "", "newp2", 100.0, 200.0);
             Log.d("Resultado - 3: ", String.valueOf(resultado));
 
             // Caso 4 - fallo peso
-            resultado = p.updateProduct(2, "newNam2", "newp2", "0", "200");
+            resultado = p.updateProduct(2, "newNam2", "newp2", 0.0, 200.0);
             Log.d("Resultado - 4: ", String.valueOf(resultado));
 
             // Caso 5 - fallo precop
-            resultado = p.updateProduct(2, "newNam2", "newp2", "100", "0");
+            resultado = p.updateProduct(2, "newNam2", "newp2", 100.0, 0.0);
             Log.d("Resultado - 5: ", String.valueOf(resultado));
 
             // Caso 6 - fallo descripcion
-            resultado = p.updateProduct(2, "newNam2", null, "100", "200");
+            resultado = p.updateProduct(2, "newNam2", null, 100.0, 200.0);
             Log.d("Resultado - 6: ", String.valueOf(resultado));
 
             // Caso 7 - fallo nombre  existe
-            resultado = p.updateProduct(2, "newNam", "newp2", "100", "200");
+            resultado = p.updateProduct(2, "newNam", "newp2", 100.0, 200.0);
             Log.d("Resultado - 7: ", String.valueOf(resultado));
 
             // Caso 8- fallo no existe rowId
-            resultado = p.updateProduct(5, "newNam2", "newp2", "100", "200");
+            resultado = p.updateProduct(5, "newNam2", "newp2", 100.0, 200.0);
             Log.d("Resultado - 8: ", String.valueOf(resultado));
         }catch(Throwable e){
             System.out.println("Se ha producido una excepcion. ");
@@ -121,7 +121,7 @@ public class Test {
         try {
             while (cadena.length() < limite) {
                 cadena += cadena;
-                rowid = p.createProduct(cadena, "cadena", "100","200");
+                rowid = p.createProduct(cadena, "cadena", 100.0,200.0);
                 Log.d("PRUEBA SOBRECARGA ", "Los caracteres añadidos son: " + cadena.length());
                 if (rowid == -1) {
                     Log.d("PRUEBA SOBRECARGA", "Fallo, limite " + cadena.length());
@@ -136,4 +136,3 @@ public class Test {
 
 
 }
-*/

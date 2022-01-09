@@ -550,7 +550,8 @@ public class ProductDbAdapter {
 
         int i = 1;
         while(i < numberProdcts){
-            resultadoCreate = createProduct("Producto" + i, "Descripcion numero" + i, "10", "20");
+            resultadoCreate = createProduct("Producto" + i, "Descripcion numero" + i,
+                    10.0, 20.0);
             if(resultadoCreate == -1) resultadoFinal = false; break;
         }
         return resultadoFinal;
