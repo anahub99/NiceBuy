@@ -101,7 +101,7 @@ public class ProductDbAdapter {
             return -1;
         }
         else{
-            if(totalProducts() < 10000){
+            if(totalProducts() < 1000){
                 ContentValues initialValues = new ContentValues();
                 initialValues.put(KEY_TITLE, title);
                 initialValues.put(KEY_PESO, peso);
@@ -368,7 +368,7 @@ public class ProductDbAdapter {
             return -1;
         }
         else {
-            if (totalOrders() < 100) {
+            if (totalOrders() < 200) {
                 ContentValues initialValues = new ContentValues();
                 initialValues.put(PE_KEY_TITLE, nombre);
                 initialValues.put(PE_KEY_TEL, telefono);
