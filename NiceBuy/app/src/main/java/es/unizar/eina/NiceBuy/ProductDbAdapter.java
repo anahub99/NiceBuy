@@ -96,7 +96,7 @@ public class ProductDbAdapter {
      * @return rowId or -1 if failed
      */
     public long createProduct(String title, String descripcion, Double peso, Double precio) {
-        if (!checkProduct(title, descripcion, peso, precio)){
+        if (!checkProduct(title, descripcion, peso, precio) || sameName(DATABASE_TABLE, KEY_TITLE, title) ){
             System.out.println("Error en los datos del producto");
             return -1;
         }
@@ -304,8 +304,8 @@ public class ProductDbAdapter {
         boolean correcto = true;
         if (title == null || title.length() <= 0 ||
                 descripcion == null || descripcion.length() <= 0 ||
-                peso < 0.0 ||
-                precio < 0.0) correcto = false;
+                peso <= 0.0 ||
+                precio <= 0.0) correcto = false;
         return correcto;
 
     }
@@ -363,7 +363,7 @@ public class ProductDbAdapter {
 
     public long crearPedido(String nombre, String telefono, String fechaLimite){
 
-        if (!checkPedido(nombre, telefono, fechaLimite)){
+        if (!checkPedido(nombre, telefono, fechaLimite) || sameName(DATABASE_TABLE_PEDIDOS, PE_KEY_TITLE, nombre)){
             System.out.println("Error en los datos del pedido");
             return -1;
         }
@@ -413,7 +413,7 @@ public class ProductDbAdapter {
 
 
     private boolean checkPesoPrecio(Double precio, Double peso){
-        if(precio == null || precio < 0 || peso == null || peso < 0) return false;
+        if(precio == null || precio <= 0 || peso == null || peso <= 0) return false;
         else return true;
     }
 
@@ -556,6 +556,18 @@ public class ProductDbAdapter {
         }
         return resultadoFinal;
     }
+
+    // Devuelve TRUE si ya hay un producto o pedido con nombre nombre
+    public boolean sameName(String bd, String campo, String name){
+        String[] argumentos = new String[] {name};
+        String preQuery = "SELECT * FROM " +  bd + " WHERE " +
+                campo + "=? ;";
+        Cursor cursor = mDb.rawQuery(preQuery, argumentos);
+        cursor.moveToFirst();
+        if (cursor.getCount() != 0) return true;
+        else return false;
+    }
+
 
 
 
