@@ -227,13 +227,13 @@ public class PedidoPad extends AppCompatActivity{
 
         private void createPedido() {
             selectedProduct = mList.getCount();
-            Intent i = new Intent(this, ProductsInPedidoPad.class);
+            Intent i = new Intent(this, PedidoEdit.class);
             startActivityForResult(i, PEDIDO_CREATE);
         }
 
         protected void editPedido(int position, long id) {
 
-            Intent i = new Intent(this, ProductsInPedidoPad.class);
+            Intent i = new Intent(this, PedidoEdit.class);
             i.putExtra(ProductDbAdapter.KEY_ROWID_PEDIDOS, id);
 
             //noinspection deprecation

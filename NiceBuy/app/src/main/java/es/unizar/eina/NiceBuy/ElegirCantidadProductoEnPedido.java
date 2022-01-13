@@ -18,16 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 @SuppressWarnings("ALL")
 public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
 
-
-    private static final int ADD_PRODUCT=0;
-    private static final int ACTIVITY_EDIT=1;
-
-    private static final int INSERT_ID = Menu.FIRST;
-    private static final int DELETE_ID = Menu.FIRST + 1;
-    private static final int EDIT_ID = Menu.FIRST + 2;
-
     // Ver los pedidos
-    private static final int VER_PEDIDO = Menu.FIRST + 3;
+    private static final int VER_PEDIDO = Menu.FIRST;
 
     int selectedProduct;
     ProductDbAdapter.OrdenarPor order;
@@ -51,9 +43,7 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
         setTitle(R.string.quantity_product_pedido);
 
         numProductos = (EditText) findViewById(R.id.cantidad);
-
-        Button confirmButton = (Button) findViewById(R.id.confirm);
-
+     
         // por defecto la ordenacion es en base al nomre
         order = ProductDbAdapter.OrdenarPor.na;
         asc = true;
@@ -78,6 +68,7 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
         populateField();
         //SortedList<String> sortedList = new SortedList(mList);
 
+        Button confirmButton = (Button) findViewById(R.id.confirm);
         confirmButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
@@ -117,7 +108,7 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
         switch (item.getItemId()) {
             case VER_PEDIDO:
                 System.out.println("aquihara");
-                Intent i = new Intent(this, ProductsInPedidoPad.class);
+                Intent i = new Intent(this, PedidoEdit.class);
                 i.putExtra(ProductDbAdapter.KEY_ROWID_PEDIDOS, pedidoId);
                 startActivity(i);
                 finish();

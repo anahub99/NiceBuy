@@ -290,7 +290,7 @@ public class ProductDbAdapter {
     }
 
     // Devuelve un entero correspondiente al numero total de pedidos
-    public int totalOrders(){
+    public int totalPedidos(){
         Cursor notesCursor = FetchAllPedidos(ProductDbAdapter.OrdenarPor.na, true);
         int cuenta = 0;
         for(notesCursor.moveToFirst(); !notesCursor.isAfterLast(); notesCursor.moveToNext()) {
@@ -368,7 +368,7 @@ public class ProductDbAdapter {
             return -1;
         }
         else {
-            if (totalOrders() < 200) {
+            if (totalPedidos() < 200) {
                 ContentValues initialValues = new ContentValues();
                 initialValues.put(PE_KEY_TITLE, nombre);
                 initialValues.put(PE_KEY_TEL, telefono);

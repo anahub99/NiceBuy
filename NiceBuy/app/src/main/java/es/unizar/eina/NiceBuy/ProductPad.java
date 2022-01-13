@@ -81,7 +81,7 @@ public class ProductPad extends AppCompatActivity {
         // Revisar esto para meter mas text
         int[] to = new int[] { R.id.text1, R.id.text2, R.id.text3 };
         SimpleCursorAdapter notes =
-                new SimpleCursorAdapter(this, R.layout.notes_row, c, from, to); // deprecated, but works
+                new SimpleCursorAdapter(this, R.layout.product_row, c, from, to); // deprecated, but works
         mList.setAdapter(notes); }
 
 

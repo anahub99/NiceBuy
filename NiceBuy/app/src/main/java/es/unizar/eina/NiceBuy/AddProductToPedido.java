@@ -20,8 +20,7 @@ import java.util.ListIterator;
 public class AddProductToPedido extends AppCompatActivity {
 
     private static final int ACTIVITY_ADD_PRODUCT=0;
-    private static final int ACTIVITY_EDIT=1;
-
+    
     private static final int INSERT_ID = Menu.FIRST;
     private static final int VER_PEDIDO = Menu.FIRST + 2;
 
@@ -37,16 +36,18 @@ public class AddProductToPedido extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_product);
-        setTitle(R.string.add_product_pedido);
 
         mDbHelper = new ProductDbAdapter(this);
         mDbHelper.open();
+        
+        setContentView(R.layout.add_product);
+        setTitle(R.string.add_product_pedido);
+
         mList = (ListView)findViewById(R.id.list);
         // por defecto la ordenacion es en base al nomre
         order = ProductDbAdapter.OrdenarPor.na;
         asc = true;
-        fillData(order,asc);
+        fillData();
         //SortedList<String> sortedList = new SortedList(mList);
 
         Bundle extras = getIntent().getExtras();
@@ -63,7 +64,7 @@ public class AddProductToPedido extends AppCompatActivity {
     }
 
 
-    private void fillData (ProductDbAdapter.OrdenarPor order, boolean asc) {
+    private void fillData () {
         Cursor c = mDbHelper.fetchAllProducts(order, asc);
         startManagingCursor(c); // deprecated method, but still works
         String[] from = new String[] {
@@ -97,7 +98,7 @@ public class AddProductToPedido extends AppCompatActivity {
         switch (item.getItemId()) {
             case VER_PEDIDO:
                 System.out.println("aquihara");
-                Intent i = new Intent(this, ProductsInPedidoPad.class);
+                Intent i = new Intent(this, PedidoEdit.class);
                 i.putExtra(ProductDbAdapter.KEY_ROWID_PEDIDOS, pedidoId);
                 startActivity(i);
                 finish();
@@ -114,21 +115,21 @@ public class AddProductToPedido extends AppCompatActivity {
     }*/
 
 
-    protected void editProduct(int position, long id) {
+    /*protected void editProduct(int position, long id) {
 
         Intent i = new Intent(this, ProductEdit.class);
         i.putExtra(ProductDbAdapter.KEY_ROWID, id);
 
         //noinspection deprecation
         startActivityForResult(i, ACTIVITY_EDIT);
-    }
+    }*/
 
 
 
     @Override
     protected void onActivityResult(int requestCode , int resultCode , Intent intent) {
         super.onActivityResult(requestCode , resultCode , intent);
-        fillData (order,asc);
+        fillData ();
         mList.setSelection(selectedProduct);
     }
 

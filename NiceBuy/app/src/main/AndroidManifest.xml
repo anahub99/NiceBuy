@@ -25,7 +25,7 @@
             android:name=".PedidoPad"
             android:exported="true" />
         <activity
-            android:name=".ProductsInPedidoPad"
+            android:name=".PedidoEdit"
             android:exported="true" />
         <activity
             android:name=".AddProductToPedido"

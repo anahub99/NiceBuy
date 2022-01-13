@@ -8,7 +8,7 @@ import android.util.Log;
 
 class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "data";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
 
     private static final String TAG = "DatabaseHelper";
 
@@ -21,7 +21,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_CREATE_PEDIDOS =
             "create table pedidos (_id integer primary key autoincrement, "
-                    + "nombre text not null, telefono text not null, fechaLimite string not null, precioPedido long, pesoPedido long);";
+                    + "nombre text not null, telefono text not null, fechaLimite string not null, precioPedido double not null, pesoPedido double not null);";
 
     private static final String DATABASE_CREATE_PERTENENCIA =
             "create table pertenece (_idProducto integer, _idPedidos integer, cantidad integer not null, "
