@@ -29,7 +29,7 @@
     <string name="quantity_product_pedido">Elegir cantidad de producto</string>
     <string name="cantidad">Cantidad</string>
     <string name="change_quantity">Cambiar cantidad</string>
-    <string name="telephone">Número de teléfono</string>
+    <string name="telephone">Número de teléfono (con código de país)</string>
     <string name="date">Fecha límite (formato dd-mm-yyyy)</string>
     <string name="back">Volver</string>
     <string name="productos">Productos</string>

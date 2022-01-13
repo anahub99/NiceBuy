@@ -137,6 +137,8 @@ public class PedidoEdit extends AppCompatActivity {
                 precioPedido.setText(pedido.getString(
                         pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_PRICE)));
             }
+        }else{
+            telefono.setText("34");
         }
 
     }

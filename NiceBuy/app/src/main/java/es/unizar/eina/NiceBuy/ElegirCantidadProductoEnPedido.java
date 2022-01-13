@@ -73,6 +73,7 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
 
             public void onClick(View view) {
                 //setResult(RESULT_OK);
+                saveState();
                 finish();
             }
 
@@ -99,7 +100,7 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(Menu.NONE, VER_PEDIDO, Menu.NONE, "Ver los pedidos");
+        menu.add(Menu.NONE, VER_PEDIDO, Menu.NONE, "Ver pedido");
         return result;
     }
 
@@ -122,7 +123,7 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        saveState();
+        //saveState();
         outState.putSerializable(ProductDbAdapter.PERT_PRODUCTO, productoId);
         outState.putSerializable(ProductDbAdapter.PERT_PEDIDO, pedidoId);
     }
@@ -130,7 +131,7 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        saveState();
+        //saveState();
     }
 
     @Override
@@ -140,7 +141,12 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
     }
 
     private void saveState() {
-        Integer cantidad = Integer.parseInt(numProductos.getText().toString());
+        Integer cantidad;
+        try {
+            cantidad = Integer.parseInt(numProductos.getText().toString());
+        } catch (NumberFormatException nfe){
+            return;
+        }
         if(!mDbHelper.updateProductoEnPedido(productoId,pedidoId,cantidad)){
             mDbHelper.anyadirProductoAPedido(productoId,pedidoId,cantidad);
         }

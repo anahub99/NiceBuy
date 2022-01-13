@@ -89,7 +89,7 @@ public class AddProductToPedido extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(Menu.NONE, VER_PEDIDO, Menu.NONE, "Ver los pedidos");
+        menu.add(Menu.NONE, VER_PEDIDO, Menu.NONE, "Ver pedido");
         return result;
     }
 
