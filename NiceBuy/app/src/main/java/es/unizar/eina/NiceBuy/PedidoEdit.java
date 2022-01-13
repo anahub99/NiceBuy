@@ -244,26 +244,42 @@ public class PedidoEdit extends AppCompatActivity {
         String fechaString = fecha.getText().toString();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
 
+        if(!mDbHelper.checkPedido(nameString,telefonoString,fechaString)){
+            Toast.makeText(this, "Hay campos no rellenados", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         try {
-            Date date = dateFormat.parse(fechaString);
-            if(date != null) System.out.println(date.toString());
-            else System.out.println("date es null");
-            if (pedidoId == null) {
-                long id = mDbHelper.crearPedido(nameString, telefonoString, fechaString);
-                if (id > 0) {
-                    pedidoId = id;
-                }
-            } else {
-                mDbHelper.updatePedido(nameString, telefonoString, fechaString, pedidoId);
-            }
+            Integer cantidad = Integer.parseInt(telefonoString);
+        } catch (NumberFormatException nfe){
+            Toast.makeText(this, "Número de teléfono incorrecto", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            finish();
-
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+        Date date;
+        try {
+            date = dateFormat.parse(fechaString);
         } catch (ParseException e) {
             //fecha mal escrita
             e.printStackTrace();
             Toast.makeText(this, "Fecha mal escrita", Toast.LENGTH_SHORT).show();
+            return;
         }
+        
+        if(date != null) System.out.println(date.toString());
+        else System.out.println("date es null");
+        if (pedidoId == null) {
+            long id = mDbHelper.crearPedido(nameString, telefonoString, fechaString);
+            if (id > 0) {
+                pedidoId = id;
+            }
+        } else {
+            mDbHelper.updatePedido(nameString, telefonoString, fechaString, pedidoId);
+        }
+
+        finish();
+
 
     }
 
