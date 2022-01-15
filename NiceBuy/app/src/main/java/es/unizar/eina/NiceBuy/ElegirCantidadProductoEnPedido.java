@@ -3,23 +3,27 @@ package es.unizar.eina.NiceBuy;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 @SuppressWarnings("ALL")
 public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
 
+
+    //private static final int ADD_PRODUCT=0;
+    //private static final int ACTIVITY_EDIT=1;
+
+    //private static final int INSERT_ID = Menu.FIRST;
+    //private static final int DELETE_ID = Menu.FIRST + 1;
+    //private static final int EDIT_ID = Menu.FIRST + 2;
+
     // Ver los pedidos
-    private static final int VER_PEDIDO = Menu.FIRST;
+    private static final int VER_PEDIDO = Menu.FIRST + 3;
 
     int selectedProduct;
     ProductDbAdapter.OrdenarPor order;
@@ -27,7 +31,6 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
     private ProductDbAdapter mDbHelper;
     private Long pedidoId;
     private Long productoId;
-    private Long mRowId;
     private EditText numProductos;
 
 
@@ -43,7 +46,8 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
         setTitle(R.string.quantity_product_pedido);
 
         numProductos = (EditText) findViewById(R.id.cantidad);
-     
+
+
         // por defecto la ordenacion es en base al nomre
         order = ProductDbAdapter.OrdenarPor.na;
         asc = true;
@@ -67,7 +71,6 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
 
         populateField();
         //SortedList<String> sortedList = new SortedList(mList);
-
         Button confirmButton = (Button) findViewById(R.id.confirm);
         confirmButton.setOnClickListener(new View.OnClickListener() {
 
@@ -111,6 +114,7 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
                 System.out.println("aquihara");
                 Intent i = new Intent(this, PedidoEdit.class);
                 i.putExtra(ProductDbAdapter.KEY_ROWID_PEDIDOS, pedidoId);
+                System.out.println("start activity");
                 startActivity(i);
                 finish();
                 return true;

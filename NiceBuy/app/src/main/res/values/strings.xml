@@ -29,7 +29,7 @@
     <string name="quantity_product_pedido">Elegir cantidad de producto</string>
     <string name="cantidad">Cantidad</string>
     <string name="change_quantity">Cambiar cantidad</string>
-    <string name="telephone">Número de teléfono (con código de país)</string>
+    <string name="telephone">Número de teléfono (+ código país)</string>
     <string name="date">Fecha límite (formato dd-mm-yyyy)</string>
     <string name="back">Volver</string>
     <string name="productos">Productos</string>
@@ -38,6 +38,7 @@
     <string name="ver_pedidos">Ver los pedidos</string>
     <string name="peso_total">Peso total:</string>
     <string name="precio_total">Precio total:</string>
+    <string name="tests">Pruebas</string>
 
     <string name="order_name_asc">Ordenar por nombre (asc.)</string>
     <string name="order_name_desc">Ordenar por nombre (desc.)</string>

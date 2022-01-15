@@ -39,7 +39,7 @@ public class ProductPad extends AppCompatActivity {
     private static final int O_P_A_D = Menu.FIRST + 8;
     // Ver los pedidos
     private static final int VER_PEDIDOS = Menu.FIRST + 9;
-    // Menu pruebas
+    // Pruebas
     private static final int TESTS = Menu.FIRST + 10;
 
     int selectedProduct;
@@ -62,14 +62,14 @@ public class ProductPad extends AppCompatActivity {
         // por defecto la ordenacion es en base al nomre
         order = ProductDbAdapter.OrdenarPor.na;
         asc = true;
-        fillData(order,asc);
+        fillData();
         //SortedList<String> sortedList = new SortedList(mList);
         registerForContextMenu(mList);
 
     }
 
 
-    private void fillData (ProductDbAdapter.OrdenarPor order, boolean asc) {
+    private void fillData () {
         Cursor c = mDbHelper.fetchAllProducts(order, asc);
         startManagingCursor(c); // deprecated method, but still works
         String[] from = new String[] {
@@ -97,9 +97,8 @@ public class ProductPad extends AppCompatActivity {
         menu.add(Menu.NONE, O_P_A_D, Menu.NONE, R.string.order_price_desc);
         menu.add(Menu.NONE, O_W_A, Menu.NONE, R.string.order_weight_asc);
         menu.add(Menu.NONE, O_W_A_D, Menu.NONE, R.string.order_weight_desc);
+        menu.add(Menu.NONE, TESTS, Menu.NONE, R.string.tests);
         menu.add(Menu.NONE, VER_PEDIDOS, Menu.NONE, R.string.ver_pedidos);
-        menu.add(Menu.NONE, TESTS, Menu.NONE, "Go Tests");
-
 
         return result;
     }
@@ -113,45 +112,42 @@ public class ProductPad extends AppCompatActivity {
             case O_N_A:
                 order = ProductDbAdapter.OrdenarPor.na;
                 asc = true;
-                fillData(order,true);
+                fillData();
                 return true;
             case O_N_A_D:
                 order = ProductDbAdapter.OrdenarPor.na;
                 asc = false;
-                fillData(order,false);
+                fillData();
                 return true;
             case O_P_A:
                 order = ProductDbAdapter.OrdenarPor.pa;
                 asc = true;
-                fillData(order,true);
+                fillData();
                 return true;
             case O_P_A_D:
                 order = ProductDbAdapter.OrdenarPor.pa;
                 asc = false;
-                fillData(order,false);
+                fillData();
                 return true;
             case O_W_A:
                 order = ProductDbAdapter.OrdenarPor.wa;
                 asc = true;
-                fillData(order,true);
+                fillData();
                 return true;
             case O_W_A_D:
                 order = ProductDbAdapter.OrdenarPor.wa;
                 asc = false;
-                fillData(order,false);
+                fillData();
                 return true;
             case VER_PEDIDOS:
-
+                System.out.println("aquihara");
                 startActivity(new Intent(ProductPad.this, PedidoPad.class));
                 finish();
                 return true;
-
             case TESTS:
                 startActivity(new Intent(ProductPad.this, Pruebas.class));
                 finish();
                 return true;
-
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -173,7 +169,7 @@ public class ProductPad extends AppCompatActivity {
             case DELETE_ID:
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 mDbHelper.deleteProduct(info.id);
-                fillData(order,asc);
+                fillData();
                 return true;
             case EDIT_ID:
                 info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -205,7 +201,7 @@ public class ProductPad extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode , int resultCode , Intent intent) {
         super.onActivityResult(requestCode , resultCode , intent);
-        fillData (order,asc);
+        fillData ();
         mList.setSelection(selectedProduct);
     }
 

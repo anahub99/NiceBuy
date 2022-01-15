@@ -15,7 +15,7 @@ public class SendAbstractionImpl implements SendAbstraction {
 	 */
 	public SendAbstractionImpl(Activity sourceActivity, String method) {
 		if(method.equalsIgnoreCase("WhatsApp"))
-			implementor = new WhatsAppImplementor(sourceActivity, (Context) sourceActivity);
+			implementor = new WhatsAppImplementor(sourceActivity);
 		else if(method.equalsIgnoreCase("SMS"))
 			implementor = new SMSImplementor(sourceActivity);
 		else

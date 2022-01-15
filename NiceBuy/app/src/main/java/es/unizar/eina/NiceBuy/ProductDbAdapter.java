@@ -33,8 +33,6 @@ public class ProductDbAdapter {
     public static final String PE_KEY_PRICE = "precioPedido";
     public static final String PE_KEY_WEIGHT = "pesoPedido";
 
-    public static final String PE_KEY_CANTIDAD = "cantidad";
-
     public static final String PERT_PRODUCTO = "_idProducto";
     public static final String PERT_PEDIDO = "_idPedidos";
     public static final String PERT_CANTIDAD = "cantidad";
@@ -162,7 +160,7 @@ public class ProductDbAdapter {
                 KEY_TITLE,
                 KEY_DESCRIPCION,
                 KEY_PESO,
-                KEY_PRECIO,
+                KEY_PRECIO
         }, null, null, null, null, parametroAux);
     }
 
@@ -319,46 +317,6 @@ public class ProductDbAdapter {
                 telefono == null || telefono.length() <= 0 ||
                 fechaLimite == null || fechaLimite.length() <= 0) correcto = false;
         return correcto;
-    }
-
-    public long createOrder(String tituloPedido, ArrayList<String> productos, int cuantos[]) {
-        if (totalOrders() > 99) {
-            return -1;
-        }
-
-        if (tituloPedido == null || tituloPedido.length() == 0) {
-            return -1;
-        }
-
-        ContentValues valores = new ContentValues();
-        int identificador = 0;
-        int precio = 0;
-        int peso = 0;
-
-        Cursor apuntador;
-
-
-
-
-        valores.put(PE_KEY_TITLE, tituloPedido);
-        valores.put(PE_KEY_WEIGHT, peso);
-        valores.put(PE_KEY_PRICE, precio);
-        long idRowOrder = mDb.insert(DATABASE_TABLE_PEDIDOS, null, valores);
-
-        if(productos != null){
-            // bucle para recorrer todos los productos
-            for(int i = 0; i< productos.size(); i++){
-                
-            }
-
-
-        }
-        else{
-            return idRowOrder;
-        }
-
-    return 10;
-
     }
 
     public long crearPedido(String nombre, String telefono, String fechaLimite){
@@ -567,9 +525,6 @@ public class ProductDbAdapter {
         if (cursor.getCount() != 0) return true;
         else return false;
     }
-
-
-
 
 }
 

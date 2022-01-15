@@ -4,6 +4,7 @@ package es.unizar.eina.NiceBuy;
 * Pantalla de pruebas, no realiza funciones de gestion en NiceBuy
 *
 * */
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ public class Pruebas extends AppCompatActivity {
     private static final int UPDATE_TEST = Menu.FIRST + 3;
     private static final int VOLUME_TEST = Menu.FIRST + 4;
     private static final int OVERLOAD_TEST = Menu.FIRST + 5;
+    private static final int VER_PRODUCTOS = Menu.FIRST + 6;
 
     private ProductDbAdapter prHelper;
 
@@ -38,6 +40,7 @@ public class Pruebas extends AppCompatActivity {
         menu.add(Menu.NONE, UPDATE_TEST, Menu.NONE,"UPDATE TEST");
         menu.add(Menu.NONE, VOLUME_TEST, Menu.NONE,"VOLUME TEST");
         menu.add(Menu.NONE, OVERLOAD_TEST, Menu.NONE,"OVERLOAD TEST");
+        menu.add(Menu.NONE, VER_PRODUCTOS, Menu.NONE, R.string.ver_productos);
         return res;
     }
 
@@ -59,6 +62,10 @@ public class Pruebas extends AppCompatActivity {
                 return true;
             case OVERLOAD_TEST:
                 test.overloadProductTest(prHelper);
+                return true;
+            case VER_PRODUCTOS:
+                startActivity(new Intent(this, ProductPad.class));
+                finish();
                 return true;
 
         }

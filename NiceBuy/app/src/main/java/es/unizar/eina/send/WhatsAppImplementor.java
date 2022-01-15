@@ -15,14 +15,12 @@ public class WhatsAppImplementor implements SendImplementor{
 
    /** actividad desde la cual se abrira la actividad de gestión de correo */
    private Activity sourceActivity;
-   private Context c;
 
    /** Constructor
     * @param source actividad desde la cual se abrira la actividad de gestion de correo
     */
-   public WhatsAppImplementor(Activity source, Context ctx){
+   public WhatsAppImplementor(Activity source){
 	   setSourceActivity(source);
-	   c = ctx;
    }
 
    /**  Actualiza la actividad desde la cual se abrira la actividad de gestion de correo */
@@ -67,7 +65,7 @@ public class WhatsAppImplementor implements SendImplementor{
 
            //intent.putExtra(Intent.EXTRA_TEXT, body);
            intent.setData(Uri.parse(url));
-
+           Context c = sourceActivity;
 
             //if (intent.resolveActivity(c.getPackageManager()) == null) {
             if (!isAppInstalled("com.whatsapp")) {
@@ -75,8 +73,8 @@ public class WhatsAppImplementor implements SendImplementor{
                 return;
             }
 
-           if (intent.resolveActivity(getSourceActivity().getPackageManager()) != null) {
-               getSourceActivity().startActivity(intent);
+           if (intent.resolveActivity(c.getPackageManager()) != null) {
+               sourceActivity.startActivity(intent);
            }else{
                Toast.makeText(c, "Error al abrir WhatsApp", Toast.LENGTH_SHORT).show();
            }

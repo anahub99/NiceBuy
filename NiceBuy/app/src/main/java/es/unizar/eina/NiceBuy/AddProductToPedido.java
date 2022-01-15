@@ -3,24 +3,21 @@ package es.unizar.eina.NiceBuy;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ListIterator;
-
 @SuppressWarnings("ALL")
 public class AddProductToPedido extends AppCompatActivity {
 
     private static final int ACTIVITY_ADD_PRODUCT=0;
-    
+    //private static final int ACTIVITY_EDIT=1;
+
     private static final int INSERT_ID = Menu.FIRST;
     private static final int VER_PEDIDO = Menu.FIRST + 2;
 
@@ -39,7 +36,7 @@ public class AddProductToPedido extends AppCompatActivity {
 
         mDbHelper = new ProductDbAdapter(this);
         mDbHelper.open();
-        
+
         setContentView(R.layout.add_product);
         setTitle(R.string.add_product_pedido);
 

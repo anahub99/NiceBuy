@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,7 @@ public class ProductEdit extends AppCompatActivity{
     private EditText descripcion;
     private EditText peso;
     private EditText precio;
+    private TextView id;
 
     // identificador fila
     private Long mRowId;
@@ -33,13 +36,11 @@ public class ProductEdit extends AppCompatActivity{
         setContentView(R.layout.product_edit);
         setTitle(R.string.menu_edit);
 
-
-
         titulo = (EditText) findViewById(R.id.title);
         descripcion = (EditText) findViewById(R.id.descripcion);
         peso = (EditText) findViewById(R.id.peso);
         precio = (EditText) findViewById(R.id.precio);
-
+        id = (TextView) findViewById(R.id.id);
 
         Button confirmButton = (Button) findViewById(R.id.confirm);
 
@@ -51,11 +52,17 @@ public class ProductEdit extends AppCompatActivity{
                     extras.getLong(ProductDbAdapter.KEY_ROWID) : null;
         }
         populateFields();
+
+        if(id.getText().toString() == ""){
+            id.setText("***");
+        }
+
         confirmButton.setOnClickListener(new View.OnClickListener() {
 
 
-            public void onClick(View view) { setResult(RESULT_OK);
-                finish ();
+            public void onClick(View view) { //setResult(RESULT_OK);
+                saveState();
+                //finish ();
             }
 
         });
@@ -75,20 +82,21 @@ public class ProductEdit extends AppCompatActivity{
                     note.getColumnIndexOrThrow(ProductDbAdapter.KEY_PESO)));
             precio.setText(note.getString(
                     note.getColumnIndexOrThrow(ProductDbAdapter.KEY_PRECIO)));
+            id.setText(mRowId.toString());
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        saveState();
+        //saveState();
         outState.putSerializable(ProductDbAdapter.KEY_ROWID, mRowId);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        saveState();
+        //saveState();
     }
 
     @Override
@@ -100,8 +108,23 @@ public class ProductEdit extends AppCompatActivity{
     private void saveState() {
         String title = titulo.getText().toString();
         String body = descripcion.getText().toString();
-        Double w = Double.valueOf(peso.getText().toString());
-        Double p = Double.valueOf(precio.getText().toString());
+        String pesoString = peso.getText().toString();
+        String precioString = precio.getText().toString();
+        Double w, p;
+
+        try {
+            w = Double.valueOf(pesoString);
+            p = Double.valueOf(precioString);
+        } catch (NumberFormatException nfe){
+            Toast.makeText(this, "Hay campos no rellenados o inválidos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(!mDbHelper.checkProduct(title,body,w,p)){
+            Toast.makeText(this, "Hay campos no rellenados o inválidos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (mRowId == null) {
             long id = mDbHelper.createProduct(title, body, w, p);
             if (id > 0) {
@@ -110,6 +133,8 @@ public class ProductEdit extends AppCompatActivity{
         } else {
             mDbHelper.updateProduct(mRowId, title, body, w, p);
         }
+
+        finish ();
     }
 
 }

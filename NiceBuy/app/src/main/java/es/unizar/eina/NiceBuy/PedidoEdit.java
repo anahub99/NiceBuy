@@ -80,8 +80,12 @@ public class PedidoEdit extends AppCompatActivity {
             pedidoId = (extras != null) ?
                     extras.getLong(ProductDbAdapter.KEY_ROWID_PEDIDOS) : null;
         }
+
         fillData();
         populateFields();
+
+        if(pedidoId == null) telefono.setText("34");
+
         //SortedList<String> sortedList = new SortedList(mList);
         registerForContextMenu(mList);
 
@@ -137,8 +141,6 @@ public class PedidoEdit extends AppCompatActivity {
                 precioPedido.setText(pedido.getString(
                         pedido.getColumnIndexOrThrow(ProductDbAdapter.PE_KEY_PRICE)));
             }
-        }else{
-            telefono.setText("34");
         }
 
     }
@@ -242,28 +244,44 @@ public class PedidoEdit extends AppCompatActivity {
         String nameString = nombre.getText().toString();
         String telefonoString = telefono.getText().toString();
         String fechaString = fecha.getText().toString();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+
+        if(!mDbHelper.checkPedido(nameString,telefonoString,fechaString)){
+            Toast.makeText(this, "Hay campos no rellenados", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         try {
-            Date date = dateFormat.parse(fechaString);
-            if(date != null) System.out.println(date.toString());
-            else System.out.println("date es null");
-            if (pedidoId == null) {
-                long id = mDbHelper.crearPedido(nameString, telefonoString, fechaString);
-                if (id > 0) {
-                    pedidoId = id;
-                }
-            } else {
-                mDbHelper.updatePedido(nameString, telefonoString, fechaString, pedidoId);
-            }
+            Integer tel1 = Integer.parseInt(telefonoString.substring(0,(telefonoString.length()/2)));
+            Integer tel2 = Integer.parseInt(telefonoString.substring(telefonoString.length()/2));
+        } catch (NumberFormatException nfe){
+            Toast.makeText(this, "Número de teléfono incorrecto", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            finish();
-
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+        Date date;
+        try {
+            date = dateFormat.parse(fechaString);
         } catch (ParseException e) {
             //fecha mal escrita
             e.printStackTrace();
             Toast.makeText(this, "Fecha mal escrita", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        if(date != null) System.out.println(date.toString());
+        else System.out.println("date es null");
+        if (pedidoId == null) {
+            long id = mDbHelper.crearPedido(nameString, telefonoString, fechaString);
+            if (id > 0) {
+                pedidoId = id;
+            }
+        } else {
+            mDbHelper.updatePedido(nameString, telefonoString, fechaString, pedidoId);
+        }
+
+        finish();
+
 
     }
 
