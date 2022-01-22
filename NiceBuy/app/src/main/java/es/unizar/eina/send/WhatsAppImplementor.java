@@ -60,14 +60,14 @@ public class WhatsAppImplementor implements SendImplementor{
             intent.setType("text/plain");
             intent.setPackage("com.whatsapp");
 
-            //en subject se guarda el teléfono destinatario
+            //con subject se pasa el teléfono destinatario
             String url = "https://api.whatsapp.com/send?phone=" + subject + "&text=" + URLEncoder.encode(body, "UTF-8");
 
-           //intent.putExtra(Intent.EXTRA_TEXT, body);
+
            intent.setData(Uri.parse(url));
            Context c = sourceActivity;
 
-            //if (intent.resolveActivity(c.getPackageManager()) == null) {
+
             if (!isAppInstalled("com.whatsapp")) {
                 Toast.makeText(c, "WhatsApp no está instalado", Toast.LENGTH_SHORT).show();
                 return;

@@ -62,7 +62,6 @@ public class ProductEdit extends AppCompatActivity{
 
             public void onClick(View view) { //setResult(RESULT_OK);
                 saveState();
-                //finish ();
             }
 
         });
@@ -89,14 +88,12 @@ public class ProductEdit extends AppCompatActivity{
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //saveState();
         outState.putSerializable(ProductDbAdapter.KEY_ROWID, mRowId);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //saveState();
     }
 
     @Override
@@ -125,10 +122,16 @@ public class ProductEdit extends AppCompatActivity{
             return;
         }
 
+        if (mDbHelper.sameName("productos", ProductDbAdapter.KEY_TITLE, title) && (mRowId == null)){
+            Toast.makeText(this, "Ya existe un producto con el mismo nombre", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (mRowId == null) {
             long id = mDbHelper.createProduct(title, body, w, p);
-            if (id > 0) mRowId = id;
-
+            if (id > 0) {
+                mRowId = id;
+            }
         } else {
             mDbHelper.updateProduct(mRowId, title, body, w, p);
         }

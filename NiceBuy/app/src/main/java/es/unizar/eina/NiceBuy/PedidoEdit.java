@@ -86,14 +86,11 @@ public class PedidoEdit extends AppCompatActivity {
 
         if(pedidoId == null) telefono.setText("34");
 
-        //SortedList<String> sortedList = new SortedList(mList);
         registerForContextMenu(mList);
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                //setResult(RESULT_OK);
-                //finish();
                 saveState();
             }
 
@@ -154,7 +151,6 @@ public class PedidoEdit extends AppCompatActivity {
         if(pedidoId != null) menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.add_product_pedido);
         menu.add(Menu.NONE, VER_PEDIDOS, Menu.NONE, "Ver los pedidos");
 
-
         return result;
     }
 
@@ -165,7 +161,6 @@ public class PedidoEdit extends AppCompatActivity {
                 addProduct();
                 return true;
             case VER_PEDIDOS:
-
                 startActivity(new Intent(PedidoEdit.this, PedidoPad.class));
                 finish();
                 return true;
@@ -180,9 +175,6 @@ public class PedidoEdit extends AppCompatActivity {
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.menu_delete);
-        //menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.change_quantity);
-       // menu.add(Menu.NONE, EMAIL_ID, Menu.NONE, R.string.menu_email);
-       // menu.add(Menu.NONE, SMS_ID, Menu.NONE, R.string.menu_sms);
     }
 
     @Override
@@ -194,11 +186,6 @@ public class PedidoEdit extends AppCompatActivity {
                 mDbHelper.deleteProductFromPedido(info.id, pedidoId);
                 fillData();
                 return true;
-            /*case EDIT_ID:
-                info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                editProduct(info.position, info.id);
-                return true;*/
-
         }
         return super.onContextItemSelected(item);
     }
@@ -211,25 +198,15 @@ public class PedidoEdit extends AppCompatActivity {
     }
 
 
-    /*@Override
-    protected void onActivityResult(int requestCode , int resultCode , Intent intent) {
-        super.onActivityResult(requestCode , resultCode , intent);
-        fillData ();
-        mList.setSelection(selectedProduct);
-    }*/
-
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //saveState();
         outState.putSerializable(ProductDbAdapter.KEY_ROWID_PEDIDOS, pedidoId);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //saveState();
     }
 
     @Override
@@ -247,6 +224,11 @@ public class PedidoEdit extends AppCompatActivity {
 
         if(!mDbHelper.checkPedido(nameString,telefonoString,fechaString)){
             Toast.makeText(this, "Hay campos no rellenados", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (mDbHelper.sameName("pedidos", ProductDbAdapter.PE_KEY_TITLE, nameString) && (pedidoId == null)){
+            Toast.makeText(this, "Ya existe un pedido con el mismo nombre de cliente", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -269,8 +251,7 @@ public class PedidoEdit extends AppCompatActivity {
             return;
         }
 
-        if(date != null) System.out.println(date.toString());
-        else System.out.println("date es null");
+
         if (pedidoId == null) {
             long id = mDbHelper.crearPedido(nameString, telefonoString, fechaString);
             if (id > 0) {

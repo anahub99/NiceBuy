@@ -14,11 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 @SuppressWarnings("ALL")
 public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
 
-
-
-
     // Ver los pedidos
-    private static final int VER_PEDIDO = Menu.FIRST + 3;
+    private static final int VER_PEDIDO = Menu.FIRST;
 
     int selectedProduct;
     ProductDbAdapter.OrdenarPor order;
@@ -65,12 +62,11 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
 
 
         populateField();
-        //SortedList<String> sortedList = new SortedList(mList);
+
         Button confirmButton = (Button) findViewById(R.id.confirm);
         confirmButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                //setResult(RESULT_OK);
                 saveState();
                 finish();
             }
@@ -93,7 +89,6 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
     }
 
 
-// Funcion para añadir las opciones del menu
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -122,7 +117,6 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //saveState();
         outState.putSerializable(ProductDbAdapter.PERT_PRODUCTO, productoId);
         outState.putSerializable(ProductDbAdapter.PERT_PEDIDO, pedidoId);
     }
@@ -130,7 +124,6 @@ public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //saveState();
     }
 
     @Override

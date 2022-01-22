@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 public class AddProductToPedido extends AppCompatActivity {
 
     private static final int ACTIVITY_ADD_PRODUCT=0;
-    //private static final int ACTIVITY_EDIT=1;
 
     private static final int INSERT_ID = Menu.FIRST;
     private static final int VER_PEDIDO = Menu.FIRST + 2;
@@ -45,7 +44,6 @@ public class AddProductToPedido extends AppCompatActivity {
         order = ProductDbAdapter.OrdenarPor.na;
         asc = true;
         fillData();
-        //SortedList<String> sortedList = new SortedList(mList);
 
         Bundle extras = getIntent().getExtras();
         pedidoId = (extras != null) ?
@@ -63,7 +61,7 @@ public class AddProductToPedido extends AppCompatActivity {
 
     private void fillData () {
         Cursor c = mDbHelper.fetchAllProducts(order, asc);
-        startManagingCursor(c); // deprecated method, but still works
+        startManagingCursor(c);
         String[] from = new String[] {
                 ProductDbAdapter.KEY_TITLE,
                 ProductDbAdapter.KEY_PESO,
@@ -71,7 +69,6 @@ public class AddProductToPedido extends AppCompatActivity {
                 ProductDbAdapter.KEY_ROWID
         };
 
-        // Revisar esto para meter mas text
         int[] to = new int[] { R.id.text1, R.id.text2, R.id.text3, R.id.button };
         SimpleCursorAdapter notes =
                 new SimpleCursorAdapter(this, R.layout.add_product_row, c, from, to); // deprecated, but works
@@ -81,7 +78,6 @@ public class AddProductToPedido extends AppCompatActivity {
     }
 
 
-// Funcion para añadir las opciones del menu
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -94,7 +90,6 @@ public class AddProductToPedido extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case VER_PEDIDO:
-                System.out.println("aquihara");
                 Intent i = new Intent(this, PedidoEdit.class);
                 i.putExtra(ProductDbAdapter.KEY_ROWID_PEDIDOS, pedidoId);
                 startActivity(i);
@@ -104,22 +99,6 @@ public class AddProductToPedido extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-   /* private void createProduct() {
-        selectedProduct = mList.getCount();
-        Intent i = new Intent(this, ProductEdit.class);
-        startActivityForResult(i, ACTIVITY_CREATE);
-    }*/
-
-
-    /*protected void editProduct(int position, long id) {
-
-        Intent i = new Intent(this, ProductEdit.class);
-        i.putExtra(ProductDbAdapter.KEY_ROWID, id);
-
-        //noinspection deprecation
-        startActivityForResult(i, ACTIVITY_EDIT);
-    }*/
 
 
 
@@ -131,17 +110,14 @@ public class AddProductToPedido extends AppCompatActivity {
     }
 
     public void addProduct(View view) {
-        // Do something in response to button click
+        // Hacer al pulsar un botón
         Button b = (Button) view;
-        //System.out.println("text "+((String) b.getText()));
         Long productId = Long.parseLong((String) b.getText());
-        //mDbHelper.anyadirProductoAPedido(productId,pedidoId,1);
 
         Intent i = new Intent(this, ElegirCantidadProductoEnPedido.class);
         i.putExtra(ProductDbAdapter.PERT_PEDIDO, pedidoId);
         i.putExtra(ProductDbAdapter.PERT_PRODUCTO, productId);
 
-        //noinspection deprecation
         startActivityForResult(i, ACTIVITY_ADD_PRODUCT);
 
 

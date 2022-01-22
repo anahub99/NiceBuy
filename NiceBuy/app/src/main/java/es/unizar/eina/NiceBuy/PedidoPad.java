@@ -59,17 +59,13 @@ public class PedidoPad extends AppCompatActivity{
         // por defecto la ordenacion es en base al nomre
         order = ProductDbAdapter.OrdenarPor.na;
         asc = true;
-        System.out.println("Oncreate, antesFilldata");
         fillData();
-        //SortedList<String> sortedList = new SortedList(mList);
         registerForContextMenu(mList);
-        System.out.println("Oncreate, fin");
 
     }
 
     private void fillData () {
         Cursor c = mDbHelper.FetchAllPedidos(order, asc);
-        System.out.println("fillDaa, finFetchAllPedidos");
         startManagingCursor(c); // deprecated method, but still works
         String[] from = new String[] {
                 ProductDbAdapter.PE_KEY_TITLE,
