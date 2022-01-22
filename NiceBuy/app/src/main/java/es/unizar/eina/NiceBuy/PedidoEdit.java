@@ -51,7 +51,7 @@ public class PedidoEdit extends AppCompatActivity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        System.out.println("editar pedido");
+
         super.onCreate(savedInstanceState);
         mDbHelper = new ProductDbAdapter(this);
         mDbHelper.open();
@@ -165,7 +165,7 @@ public class PedidoEdit extends AppCompatActivity {
                 addProduct();
                 return true;
             case VER_PEDIDOS:
-                System.out.println("aquihara");
+
                 startActivity(new Intent(PedidoEdit.this, PedidoPad.class));
                 finish();
                 return true;

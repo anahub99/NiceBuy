@@ -15,12 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class ElegirCantidadProductoEnPedido extends AppCompatActivity {
 
 
-    //private static final int ADD_PRODUCT=0;
-    //private static final int ACTIVITY_EDIT=1;
 
-    //private static final int INSERT_ID = Menu.FIRST;
-    //private static final int DELETE_ID = Menu.FIRST + 1;
-    //private static final int EDIT_ID = Menu.FIRST + 2;
 
     // Ver los pedidos
     private static final int VER_PEDIDO = Menu.FIRST + 3;

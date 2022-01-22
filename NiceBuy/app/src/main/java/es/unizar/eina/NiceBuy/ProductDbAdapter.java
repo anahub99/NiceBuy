@@ -20,12 +20,15 @@ import java.util.ArrayList;
  */
 public class ProductDbAdapter {
 
+    // Productos
     public static final String KEY_TITLE = "title";
     public static final String KEY_DESCRIPCION = "descripcion";
     public static final String KEY_PRECIO = "precio";
     public static final String KEY_PESO = "peso";
     public static final String KEY_ROWID = "_id";
 
+
+    // Pedidos
     public static final String KEY_ROWID_PEDIDOS = "_id";
     public static final String PE_KEY_TITLE = "nombre";
     public static final String PE_KEY_TEL = "telefono";
@@ -40,6 +43,9 @@ public class ProductDbAdapter {
 
 
     public enum OrdenarPor {
+        // Nombre ascendente
+        // Precio ascedente
+        // Peso (weight ascendente)
         na, pa, wa
     }
 
@@ -79,9 +85,7 @@ public class ProductDbAdapter {
         return this;
     }
 
-    public void close() {
-        mDbHelper.close();
-    }
+
 
 
     /**
@@ -108,14 +112,14 @@ public class ProductDbAdapter {
                 return mDb.insert(DATABASE_TABLE, null, initialValues);
             }
             else{
-                System.out.println("Limte de productos alcanzado");
+                System.out.println("Lo sentimos, ha alcanzado el numero maximo de productos. " +
+                        "Borre alguno por favor.");
                 return -1;
             }
         }
     }
 
 
-   // public long createPedido()
 
     /**
      * Delete the note with the given rowId
@@ -136,19 +140,19 @@ public class ProductDbAdapter {
     public Cursor fetchAllProducts(OrdenarPor parametro, boolean asc) {
     String parametroAux = null;
     switch(parametro){
-        //nombre ascendente
+        //nombre ascendente, si asc == false, descendente
         case na:
             parametroAux = KEY_TITLE;
             if(asc) parametroAux = parametroAux+" ASC";
             else parametroAux = parametroAux+" DESC";
             break;
-            //precio ascendente
+            //precio ascendente, si asc == false, descendente
         case pa:
             parametroAux = KEY_PRECIO;
             if(asc) parametroAux = parametroAux+" ASC";
             else parametroAux = parametroAux+" DESC";
             break;
-            //peso ascendente
+            //peso ascendente, si asc == false, descendente
         case wa:
             parametroAux = KEY_PESO;
             if(asc) parametroAux = parametroAux+" ASC";
@@ -239,43 +243,33 @@ public class ProductDbAdapter {
 
 
     public Cursor FetchAllPedidos(OrdenarPor parametro, boolean asc) {
-        System.out.println("hola entre");
         String parametroAux = null;
         switch(parametro){
-            //nombre ascendente
+            //nombre ascendente, si asc == false, descendente
             case na:
                 parametroAux = PE_KEY_TITLE;
                 if(asc) parametroAux = parametroAux+" ASC";
                 else parametroAux = parametroAux+" DESC";
-                System.out.println("caso na");
                 break;
-            //precio ascendente
+            //precio ascendente, si asc == false, descendente
             case pa:
                 parametroAux = PE_KEY_PRICE;
                 if(asc) parametroAux = parametroAux+" ASC";
                 else parametroAux = parametroAux+" DESC";
                 break;
-            //peso ascendente
+            //peso ascendente, si asc == false, descendente
             case wa:
                 parametroAux = PE_KEY_WEIGHT;
                 if(asc) parametroAux = parametroAux+" ASC";
                 else parametroAux = parametroAux+" DESC";
                 break;
         }
-        System.out.println("al final");
+
         return mDb.query(DATABASE_TABLE_PEDIDOS, null
                 , null, null, null, null, parametroAux);
     }
 
-    private int producCounter(int p[]){
-        int counter = 0;
-        for (int i = 0; i<p.length; i++){
-            if (p[i] != 0){
-                counter++;
-            }
-        }
-        return counter;
-    }
+
 
     // Devuelve un entero correspondiente al numero total de productos
     public int totalProducts(){
@@ -392,7 +386,7 @@ public class ProductDbAdapter {
         if (cantidad == null || idProducto == null || idPedido == null || cantidad < 0){
             return -1;
         }else {
-            System.out.println("param long " + idProducto);
+
             ContentValues initialValues = new ContentValues();
             initialValues.put(PERT_PRODUCTO, idProducto);
             initialValues.put(PERT_PEDIDO, idPedido);
@@ -409,8 +403,8 @@ public class ProductDbAdapter {
             args.put(PERT_CANTIDAD, cantidad);
             boolean b  = mDb.update(DATABASE_TABLE_PERTENENCIA, args, PERT_PRODUCTO + "=? AND " + PERT_PEDIDO + "=?",
                     new String[]{String.valueOf(idProducto), String.valueOf(idPedido)}) > 0;
-            System.out.print("update ");
-            System.out.println(b);
+
+
             return b;
 
         }
@@ -449,14 +443,14 @@ public class ProductDbAdapter {
         String seleccionarProductos = "SELECT * FROM pertenece, productos WHERE"
                 + " productos._id=_idProducto AND _idPedidos=?"
                 + " ORDER BY ?";
-        System.out.println("seleccionar productos");
+
         return mDb.rawQuery(seleccionarProductos, new String[]{String.valueOf(idPedido), parametroAux});
     }
 
 
     public Cursor fetchProductEnPedido(Long idProducto, Long idPedido) {
-        System.out.println("pedidoId "+String.valueOf(idPedido));
-        System.out.println("productId "+String.valueOf(idProducto));
+
+
         Cursor mCursor = mDb.query(true, DATABASE_TABLE_PERTENENCIA, new String[]{PERT_CANTIDAD},
                         PERT_PRODUCTO + "=? AND " + PERT_PEDIDO + "=?", new String[]{String.valueOf(idProducto),
                                 String.valueOf(idPedido)},

@@ -12,11 +12,17 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Pruebas extends AppCompatActivity {
+    //Prueba crear
     private static final int CREATE_TEST = Menu.FIRST;
+    //Prueba borrar
     private static final int DELETE_TEST = Menu.FIRST + 2;
+    //Prueba actualizar
     private static final int UPDATE_TEST = Menu.FIRST + 3;
+    //Prueba volumen objetos
     private static final int VOLUME_TEST = Menu.FIRST + 4;
+    //Prueba sobrecarga
     private static final int OVERLOAD_TEST = Menu.FIRST + 5;
+    // Volver al menu de ver productos
     private static final int VER_PRODUCTOS = Menu.FIRST + 6;
 
     private ProductDbAdapter prHelper;
@@ -32,6 +38,7 @@ public class Pruebas extends AppCompatActivity {
         prHelper.open();
     }
 
+    // Menu de la pantalla
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean res = super.onCreateOptionsMenu(menu);

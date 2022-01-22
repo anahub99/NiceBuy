@@ -78,7 +78,6 @@ public class ProductPad extends AppCompatActivity {
                 ProductDbAdapter.KEY_PRECIO
         };
 
-        // Revisar esto para meter mas text
         int[] to = new int[] { R.id.text1, R.id.text2, R.id.text3 };
         SimpleCursorAdapter notes =
                 new SimpleCursorAdapter(this, R.layout.product_row, c, from, to); // deprecated, but works
@@ -182,25 +181,25 @@ public class ProductPad extends AppCompatActivity {
 
     private void createProduct() {
         selectedProduct = mList.getCount();
-        Intent i = new Intent(this, ProductEdit.class);
-        startActivityForResult(i, ACTIVITY_CREATE);
+        Intent intento = new Intent(this, ProductEdit.class);
+        startActivityForResult(intento, ACTIVITY_CREATE);
     }
 
 
-    protected void editProduct(int position, long id) {
+    protected void editProduct(int position, long identificador) {
 
-        Intent i = new Intent(this, ProductEdit.class);
-        i.putExtra(ProductDbAdapter.KEY_ROWID, id);
+        Intent intento = new Intent(this, ProductEdit.class);
+        intento.putExtra(ProductDbAdapter.KEY_ROWID, identificador);
 
         //noinspection deprecation
-        startActivityForResult(i, ACTIVITY_EDIT);
+        startActivityForResult(intento, ACTIVITY_EDIT);
     }
 
 
 
     @Override
-    protected void onActivityResult(int requestCode , int resultCode , Intent intent) {
-        super.onActivityResult(requestCode , resultCode , intent);
+    protected void onActivityResult(int codigoSolicitud , int codigoResultado , Intent intento) {
+        super.onActivityResult(codigoSolicitud , codigoResultado , intento);
         fillData ();
         mList.setSelection(selectedProduct);
     }

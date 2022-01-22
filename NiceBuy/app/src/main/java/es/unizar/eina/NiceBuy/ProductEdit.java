@@ -127,9 +127,8 @@ public class ProductEdit extends AppCompatActivity{
 
         if (mRowId == null) {
             long id = mDbHelper.createProduct(title, body, w, p);
-            if (id > 0) {
-                mRowId = id;
-            }
+            if (id > 0) mRowId = id;
+
         } else {
             mDbHelper.updateProduct(mRowId, title, body, w, p);
         }
