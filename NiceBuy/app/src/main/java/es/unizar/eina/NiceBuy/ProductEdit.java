@@ -60,7 +60,7 @@ public class ProductEdit extends AppCompatActivity{
         confirmButton.setOnClickListener(new View.OnClickListener() {
 
 
-            public void onClick(View view) { //setResult(RESULT_OK);
+            public void onClick(View view) { 
                 saveState();
             }
 

@@ -30,7 +30,6 @@ public class PedidoEdit extends AppCompatActivity {
 
     private static final int INSERT_ID = Menu.FIRST;
     private static final int DELETE_ID = Menu.FIRST + 1;
-    //private static final int EDIT_ID = Menu.FIRST + 2;
 
     // Ver los pedidos
     private static final int VER_PEDIDOS = Menu.FIRST + 3;
@@ -110,10 +109,9 @@ public class PedidoEdit extends AppCompatActivity {
                     ProductDbAdapter.KEY_PRECIO
             };
 
-            // Revisar esto para meter mas text
             int[] to = new int[]{ R.id.text1, R.id.text2, R.id.text3, R.id.text4 };
             SimpleCursorAdapter notes =
-                    new SimpleCursorAdapter(this, R.layout.product_in_pedido, c, from, to); // deprecated, but works
+                    new SimpleCursorAdapter(this, R.layout.product_in_pedido, c, from, to); 
             mList.setAdapter(notes);
         }
     }
@@ -124,7 +122,7 @@ public class PedidoEdit extends AppCompatActivity {
         if(pedidoId != null) {
             Cursor pedido = mDbHelper.fetchPedido(pedidoId);
             if (pedido != null && pedido.getCount() > 0) {
-                //noinspection deprecation
+                
                 startManagingCursor(pedido);
 
                 nombre.setText(pedido.getString(
@@ -143,7 +141,7 @@ public class PedidoEdit extends AppCompatActivity {
     }
 
 
-// Funcion para añadir las opciones del menu
+    // Funcion para añadir las opciones del menu
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

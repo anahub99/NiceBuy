@@ -63,7 +63,6 @@ public class ProductPad extends AppCompatActivity {
         order = ProductDbAdapter.OrdenarPor.na;
         asc = true;
         fillData();
-        //SortedList<String> sortedList = new SortedList(mList);
         registerForContextMenu(mList);
 
     }
@@ -71,7 +70,7 @@ public class ProductPad extends AppCompatActivity {
 
     private void fillData () {
         Cursor c = mDbHelper.fetchAllProducts(order, asc);
-        startManagingCursor(c); // deprecated method, but still works
+        startManagingCursor(c); 
         String[] from = new String[] {
                 ProductDbAdapter.KEY_TITLE,
                 ProductDbAdapter.KEY_PESO,
@@ -80,7 +79,7 @@ public class ProductPad extends AppCompatActivity {
 
         int[] to = new int[] { R.id.text1, R.id.text2, R.id.text3 };
         SimpleCursorAdapter notes =
-                new SimpleCursorAdapter(this, R.layout.product_row, c, from, to); // deprecated, but works
+                new SimpleCursorAdapter(this, R.layout.product_row, c, from, to); 
         mList.setAdapter(notes); }
 
 
@@ -139,7 +138,6 @@ public class ProductPad extends AppCompatActivity {
                 fillData();
                 return true;
             case VER_PEDIDOS:
-                System.out.println("aquihara");
                 startActivity(new Intent(ProductPad.this, PedidoPad.class));
                 finish();
                 return true;
@@ -157,8 +155,6 @@ public class ProductPad extends AppCompatActivity {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.menu_delete);
         menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.menu_edit);
-       // menu.add(Menu.NONE, EMAIL_ID, Menu.NONE, R.string.menu_email);
-       // menu.add(Menu.NONE, SMS_ID, Menu.NONE, R.string.menu_sms);
     }
 
     @Override
@@ -191,7 +187,6 @@ public class ProductPad extends AppCompatActivity {
         Intent intento = new Intent(this, ProductEdit.class);
         intento.putExtra(ProductDbAdapter.KEY_ROWID, identificador);
 
-        //noinspection deprecation
         startActivityForResult(intento, ACTIVITY_EDIT);
     }
 

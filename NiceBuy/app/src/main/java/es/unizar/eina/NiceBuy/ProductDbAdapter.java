@@ -466,8 +466,6 @@ public class ProductDbAdapter {
 
     public Double precioTotalPedido(Long idPedido){
 
-        //Cursor mCursor = mDb.rawQuery("select sum(totalprice) as total from " + TABLE_Users + ";", null);
-
         String query = "select sum(cantidad * precio) as total from productos, pertenece "
                 + "where _idPedidos = ? AND _idProducto = productos._id";
 
@@ -480,8 +478,6 @@ public class ProductDbAdapter {
     }
 
     public Double pesoTotalPedido(Long idPedido){
-
-        //Cursor mCursor = mDb.rawQuery("select sum(totalprice) as total from " + TABLE_Users + ";", null);
 
         String query = "select sum(cantidad * peso) as total from productos, pertenece "
                 + "where _idPedidos = ? AND _idProducto = productos._id";

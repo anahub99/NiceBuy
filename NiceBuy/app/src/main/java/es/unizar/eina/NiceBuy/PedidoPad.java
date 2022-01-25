@@ -75,10 +75,9 @@ public class PedidoPad extends AppCompatActivity{
                 ProductDbAdapter.PE_KEY_PRICE
         };
 
-        // Revisar esto para meter mas text
         int[] to = new int[] { R.id.text1, R.id.text2, R.id.text3, R.id.text4, R.id.text5 };
         SimpleCursorAdapter notes =
-                new SimpleCursorAdapter(this, R.layout.pedido_row, c, from, to); // deprecated, but works
+                new SimpleCursorAdapter(this, R.layout.pedido_row, c, from, to); 
         mList.setAdapter(notes); }
 
         @Override
@@ -150,8 +149,6 @@ public class PedidoPad extends AppCompatActivity{
             menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.order_delete);
             menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.order_edit);
             menu.add(Menu.NONE, SEND_WHATSAPP, Menu.NONE, R.string.menu_whatsapp);
-            // menu.add(Menu.NONE, EMAIL_ID, Menu.NONE, R.string.menu_email);
-            // menu.add(Menu.NONE, SMS_ID, Menu.NONE, R.string.menu_sms);
         }
 
         @Override
@@ -237,11 +234,8 @@ public class PedidoPad extends AppCompatActivity{
 
         @Override
         protected void onActivityResult(int requestCode , int resultCode , Intent intent) {
-            System.out.println("terminar crear pedido");
             super.onActivityResult(requestCode , resultCode , intent);
-            System.out.println("terminar crear pedido2");
             fillData();
-            System.out.println("terminar crear pedido3");
             mList.setSelection(selectedProduct);
         }
 

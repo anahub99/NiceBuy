@@ -14,12 +14,7 @@ public class SendAbstractionImpl implements SendAbstraction {
 	 * @param method parametro potencialmente utilizable para instanciar el objeto delegado
 	 */
 	public SendAbstractionImpl(Activity sourceActivity, String method) {
-		if(method.equalsIgnoreCase("WhatsApp"))
-			implementor = new WhatsAppImplementor(sourceActivity);
-		else if(method.equalsIgnoreCase("SMS"))
-			implementor = new SMSImplementor(sourceActivity);
-		else
-       	    implementor = new MailImplementor(sourceActivity);
+		if(method.equalsIgnoreCase("WhatsApp")) implementor = new WhatsAppImplementor(sourceActivity);
 	}
 
 	/** Envia la correo con el asunto (subject) y cuerpo (body) que se reciben como parametros a traves de un objeto delegado
