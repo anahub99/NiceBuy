@@ -32,7 +32,7 @@ public class Pruebas extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-        //setContentView(R.layout.pruebas);
+
 
         prHelper = new ProductDbAdapter(this);
         prHelper.open();

@@ -95,6 +95,8 @@ public class ProductDbAdapter {
      *
      * @param title the title of the note
      * @param descripcion the body of the note
+     * @param peso the weight
+     * @precio precio del prducto
      * @return rowId or -1 if failed
      */
     public long createProduct(String title, String descripcion, Double peso, Double precio) {

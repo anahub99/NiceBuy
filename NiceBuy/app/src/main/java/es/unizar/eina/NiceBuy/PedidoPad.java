@@ -56,13 +56,29 @@ public class PedidoPad extends AppCompatActivity{
         mDbHelper = new ProductDbAdapter(this);
         mDbHelper.open();
         mList = (ListView)findViewById(R.id.list);
-        // por defecto la ordenacion es en base al nomre
+        // por defecto la ordenacion es en base al nombre del producto
         order = ProductDbAdapter.OrdenarPor.na;
         asc = true;
         fillData();
         registerForContextMenu(mList);
 
     }
+
+    private void createPedido() {
+        selectedProduct = mList.getCount();
+        Intent i = new Intent(this, PedidoEdit.class);
+        startActivityForResult(i, PEDIDO_CREATE);
+    }
+
+    protected void editPedido(int position, long id) {
+
+        Intent i = new Intent(this, PedidoEdit.class);
+        i.putExtra(ProductDbAdapter.KEY_ROWID_PEDIDOS, id);
+
+        //noinspection deprecation
+        startActivityForResult(i, PEDIDO_EDIT);
+    }
+
 
     private void fillData () {
         Cursor c = mDbHelper.FetchAllPedidos(order, asc);
@@ -183,6 +199,7 @@ public class PedidoPad extends AppCompatActivity{
                     startManagingCursor(productosDePedido);
                     productosDePedido.moveToFirst();
                     String productos = "Lista de productos:\n\n";
+
                     do{
                         String nombreProducto = productosDePedido.getString(
                                 productosDePedido.getColumnIndexOrThrow(ProductDbAdapter.KEY_TITLE));
@@ -216,20 +233,6 @@ public class PedidoPad extends AppCompatActivity{
             return super.onContextItemSelected(item);
         }
 
-        private void createPedido() {
-            selectedProduct = mList.getCount();
-            Intent i = new Intent(this, PedidoEdit.class);
-            startActivityForResult(i, PEDIDO_CREATE);
-        }
-
-        protected void editPedido(int position, long id) {
-
-            Intent i = new Intent(this, PedidoEdit.class);
-            i.putExtra(ProductDbAdapter.KEY_ROWID_PEDIDOS, id);
-
-            //noinspection deprecation
-            startActivityForResult(i, PEDIDO_EDIT);
-        }
 
 
         @Override

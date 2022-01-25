@@ -11,37 +11,37 @@ public class Test {
         try{
             Log.d("PRUEBAS DE EQUIVALENCIA","createProduct()");
             long resultado;
-            // Caso 1
+            // Caso 1 - correcto
             resultado = p.createProduct("pr1", "primero", 10.0, 20.0);
             Log.d("Resultado - 1: ", String.valueOf(resultado));
 
-            // Caso 2
+            // Caso 2 - fallo vacio
             resultado = p.createProduct("", "primero", 10.0, 20.0);
             Log.d("Resultado - 2: ", String.valueOf(resultado));
 
-            // Caso 3
+            // Caso 3 - fallo null
             resultado = p.createProduct(null, "primero", 10.0, 20.0);
             Log.d("Resultado - 3: ", String.valueOf(resultado));
 
-            // Caso 4
+            // Caso 4 - fallo existe producto
             resultado = p.createProduct("pr1", "primero", 10.0, 20.0);
             Log.d("Resultado - 4: ", String.valueOf(resultado));
 
-            // Caso 5
+            // Caso 5 - fallo precio 0
             resultado = p.createProduct("pr2", "segundo", 10.0, 0.0);
             Log.d("Resultado - 5: ", String.valueOf(resultado));
 
-            // Caso 6
+            // Caso 6 - fallo peso 0
             resultado = p.createProduct("pr2", "segundo", 0.0, 20.0);
             Log.d("Resultado - 6: ", String.valueOf(resultado));
 
-            // Caso 7
+            // Caso 7 - fallo descripcion nula
             resultado = p.createProduct("pr2", null, 10.0, 20.0);
             Log.d("Resultado - 7: ", String.valueOf(resultado));
 
 
         }catch(Throwable e){
-            System.out.println("Se ha producido una excepcion. ");
+            System.out.println("Se ha producido una excepcion creando producto. ");
         }
     }
 
@@ -81,7 +81,7 @@ public class Test {
             resultado = p.updateProduct(5, "newNam2", "newp2", 100.0, 200.0);
             Log.d("Resultado - 8: ", String.valueOf(resultado));
         }catch(Throwable e){
-            System.out.println("Se ha producido una excepcion. ");
+            System.out.println("Se ha producido una excepcion actualizando producto. ");
         }
     }
 
@@ -98,7 +98,7 @@ public class Test {
             Log.d("Resultado - 2: ", String.valueOf(resultado));
 
         }catch(Throwable e){
-            System.out.println("Se ha producido una excepcion. ");
+            System.out.println("Se ha producido una excepcion borrando producto. ");
         }
     }
 
@@ -110,7 +110,7 @@ public class Test {
             res = pr.manyProductTest(1000);
             Log.d("RESULTADO PRUEBA DE VOLUMEN", String.valueOf(res));
         }catch(Throwable e){
-            System.out.println("Se ha producido una excepcion. ");
+            System.out.println("Se ha producido una excepcion durante la prueba de volumen. ");
         }
     }
 

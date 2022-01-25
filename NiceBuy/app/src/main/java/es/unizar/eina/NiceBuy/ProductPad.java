@@ -67,6 +67,12 @@ public class ProductPad extends AppCompatActivity {
 
     }
 
+    private void createProduct() {
+        selectedProduct = mList.getCount();
+        Intent intento = new Intent(this, ProductEdit.class);
+        startActivityForResult(intento, ACTIVITY_CREATE);
+    }
+
 
     private void fillData () {
         Cursor c = mDbHelper.fetchAllProducts(order, asc);
@@ -149,13 +155,9 @@ public class ProductPad extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.menu_delete);
-        menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.menu_edit);
-    }
+
+
+
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -175,12 +177,22 @@ public class ProductPad extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
-    private void createProduct() {
-        selectedProduct = mList.getCount();
-        Intent intento = new Intent(this, ProductEdit.class);
-        startActivityForResult(intento, ACTIVITY_CREATE);
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.menu_delete);
+
+        menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.menu_edit);
     }
 
+
+    @Override
+    protected void onActivityResult(int codigoSolicitud , int codigoResultado , Intent intento) {
+        super.onActivityResult(codigoSolicitud , codigoResultado , intento);
+        fillData ();
+        mList.setSelection(selectedProduct);
+    }
 
     protected void editProduct(int position, long identificador) {
 
@@ -192,11 +204,6 @@ public class ProductPad extends AppCompatActivity {
 
 
 
-    @Override
-    protected void onActivityResult(int codigoSolicitud , int codigoResultado , Intent intento) {
-        super.onActivityResult(codigoSolicitud , codigoResultado , intento);
-        fillData ();
-        mList.setSelection(selectedProduct);
-    }
+
 
 }
